@@ -1,4 +1,4 @@
-package com.example.traveldiary
+package com.example.sportfieldsearcher
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,10 +14,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.traveldiary.ui.TravelDiaryNavGraph
-import com.example.traveldiary.ui.TravelDiaryRoute
-import com.example.traveldiary.ui.composables.AppBar
-import com.example.traveldiary.ui.theme.TravelDiaryTheme
+import com.example.sportfieldsearcher.ui.utils.TravelDiaryNavGraph
+import com.example.sportfieldsearcher.ui.utils.TravelDiaryRoute
+import com.example.sportfieldsearcher.ui.composables.AppBar
+import com.example.sportfieldsearcher.ui.theme.TravelDiaryTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

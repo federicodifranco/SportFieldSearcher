@@ -1,4 +1,4 @@
-package com.example.traveldiary.ui.screens.addtravel
+package com.example.sportfieldsearcher.ui.screens.addtravel
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

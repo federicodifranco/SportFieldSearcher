@@ -1,4 +1,4 @@
-package com.example.traveldiary.ui.theme
+package com.example.sportfieldsearcher.ui.theme
 
 import android.app.Activity
 import android.os.Build

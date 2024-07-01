@@ -1,4 +1,4 @@
-package com.example.traveldiary.ui.composables
+package com.example.sportfieldsearcher.ui.composables
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
@@ -14,7 +14,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
-import com.example.traveldiary.ui.TravelDiaryRoute
+import com.example.sportfieldsearcher.ui.utils.TravelDiaryRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

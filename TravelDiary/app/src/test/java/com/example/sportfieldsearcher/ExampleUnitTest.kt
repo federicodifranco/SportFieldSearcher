@@ -1,4 +1,4 @@
-package com.example.traveldiary
+package com.example.sportfieldsearcher
 
 import org.junit.Test
 

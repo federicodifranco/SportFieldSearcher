@@ -1,4 +1,4 @@
-package com.example.traveldiary.ui
+package com.example.sportfieldsearcher.ui.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,12 +10,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.traveldiary.ui.screens.addtravel.AddTravelScreen
-import com.example.traveldiary.ui.screens.addtravel.AddTravelViewModel
-import com.example.traveldiary.ui.screens.home.HomeScreen
-import com.example.traveldiary.ui.screens.settings.SettingsScreen
-import com.example.traveldiary.ui.screens.settings.SettingsViewModel
-import com.example.traveldiary.ui.screens.traveldetails.TravelDetailsScreen
+import com.example.sportfieldsearcher.ui.screens.addfield.AddTravelScreen
+import com.example.sportfieldsearcher.ui.screens.addfield.AddTravelViewModel
+import com.example.sportfieldsearcher.ui.screens.home.HomeScreen
+import com.example.sportfieldsearcher.ui.screens.settings.SettingsScreen
+import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
+import com.example.sportfieldsearcher.ui.screens.fielddetails.TravelDetailsScreen
 import org.koin.androidx.compose.koinViewModel
 
 sealed class TravelDiaryRoute(
