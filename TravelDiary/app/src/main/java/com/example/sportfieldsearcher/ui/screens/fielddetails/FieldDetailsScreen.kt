@@ -1,4 +1,4 @@
-package com.example.traveldiary.ui.screens.traveldetails
+package com.example.sportfieldsearcher.ui.screens.fielddetails
 
 import android.content.Intent
 import androidx.compose.foundation.Image
@@ -28,16 +28,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TravelDetailsScreen(travelId: String) {
+fun FieldDetailsScreen(fieldId: String) {
     val ctx = LocalContext.current
 
     fun shareDetails() {
         val sendIntent = Intent().apply {
             action = Intent.ACTION_SEND
             type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, travelId)
+            putExtra(Intent.EXTRA_TEXT, fieldId)
         }
-        val shareIntent = Intent.createChooser(sendIntent, "Share travel")
+        val shareIntent = Intent.createChooser(sendIntent, "Share field")
         if (shareIntent.resolveActivity(ctx.packageManager) != null) {
             ctx.startActivity(shareIntent)
         }
@@ -49,7 +49,7 @@ fun TravelDetailsScreen(travelId: String) {
                 containerColor = MaterialTheme.colorScheme.primary,
                 onClick = ::shareDetails
             ) {
-                Icon(Icons.Outlined.Share, "Share Travel")
+                Icon(Icons.Outlined.Share, "Share field")
             }
         },
     ) { contentPadding ->
@@ -60,7 +60,7 @@ fun TravelDetailsScreen(travelId: String) {
         ) {
             Image(
                 Icons.Outlined.Image,
-                "Travel picture",
+                "Field picture",
                 contentScale = ContentScale.Fit,
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
                 modifier = Modifier
@@ -71,7 +71,7 @@ fun TravelDetailsScreen(travelId: String) {
                     .padding(36.dp)
             )
             Text(
-                travelId,
+                fieldId,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.titleLarge
             )

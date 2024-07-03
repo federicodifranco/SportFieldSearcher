@@ -1,4 +1,4 @@
-package com.example.sportfieldsearcher.ui.screens.addtravel
+package com.example.sportfieldsearcher.ui.screens.addfield
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,9 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun AddTravelScreen(
-    state: AddTravelState,
-    actions: AddTravelActions,
+fun AddFieldScreen(
+    state: AddFieldState,
+    actions: AddFieldActions,
     navController: NavHostController
 ) {
     Scaffold(
@@ -96,7 +96,7 @@ fun AddTravelScreen(
             Spacer(Modifier.size(8.dp))
             Image(
                 Icons.Outlined.Image,
-                "Travel picture",
+                "Field picture",
                 contentScale = ContentScale.Fit,
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
                 modifier = Modifier

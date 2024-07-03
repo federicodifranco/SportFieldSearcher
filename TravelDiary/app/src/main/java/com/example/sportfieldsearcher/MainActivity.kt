@@ -19,6 +19,8 @@ import com.example.sportfieldsearcher.ui.utils.TravelDiaryRoute
 import com.example.sportfieldsearcher.ui.composables.AppBar
 import com.example.sportfieldsearcher.ui.theme.TravelDiaryTheme
 
+enum class Theme {Light, Dark, System}
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
