@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.update
 data class AddFieldState(
     val location: String = "",
     val date: String = "",
-    val description: String = "",
+    val description: String = ""
 )
 
 interface AddFieldActions {
@@ -30,5 +30,6 @@ class AddFieldViewModel : ViewModel() {
 
         override fun setDescription(description: String) =
             _state.update { it.copy(description = description) }
+
     }
 }

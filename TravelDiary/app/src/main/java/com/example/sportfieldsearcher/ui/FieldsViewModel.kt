@@ -1,4 +1,4 @@
-package com.example.sportfieldsearcher.ui.theme
+package com.example.sportfieldsearcher.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

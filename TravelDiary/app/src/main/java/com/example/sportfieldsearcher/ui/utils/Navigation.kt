@@ -1,6 +1,7 @@
 package com.example.sportfieldsearcher.ui.utils
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -10,6 +11,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.sportfieldsearcher.data.database.Field
+import com.example.sportfieldsearcher.ui.FieldsViewModel
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldScreen
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldViewModel
 import com.example.sportfieldsearcher.ui.screens.home.HomeScreen
@@ -29,7 +32,7 @@ sealed class SportFieldSearcherRoute(
         "Field Details",
         listOf(navArgument("fieldId") { type = NavType.StringType })
     ) {
-        fun buildRoute(travelId: String) = "fields/$fieldId"
+        fun buildRoute(fieldId: String) = "fields/$fieldId"
     }
     data object AddField : SportFieldSearcherRoute("fields/add", "Add Field")
     data object Settings : SportFieldSearcherRoute("settings", "Settings")
@@ -44,6 +47,9 @@ fun SportFieldSearcherNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val fieldsVM = koinViewModel<FieldsViewModel>()
+    val fieldsState by fieldsVM.state.collectAsStateWithLifecycle()
+
     NavHost(
         navController = navController,
         startDestination = SportFieldSearcherRoute.Home.route,
@@ -51,19 +57,33 @@ fun SportFieldSearcherNavGraph(
     ) {
         with(SportFieldSearcherRoute.Home) {
             composable(route) {
-                HomeScreen(navController)
+                HomeScreen(fieldsState, navController)
             }
         }
         with(SportFieldSearcherRoute.FieldDetails) {
             composable(route, arguments) { backStackEntry ->
-                FieldDetailsScreen(backStackEntry.arguments?.getString("fieldId") ?: "")
+                val field = requireNotNull(fieldsState.fields.find { field ->
+                    field.id == backStackEntry.arguments?.getString("fieldId")?.toInt()
+                })
+                FieldDetailsScreen(field)
             }
         }
         with(SportFieldSearcherRoute.AddField) {
             composable(route) {
                 val addFieldVm = koinViewModel<AddFieldViewModel>()
                 val state by addFieldVm.state.collectAsStateWithLifecycle()
-                AddFieldScreen(state, addFieldVm.actions, navController)
+                AddFieldScreen(
+                    state,
+                    addFieldVm.actions,
+                    onCreate = {
+                        fieldsVM.addField(Field(
+                            name = state.location,
+                            date = state.date,
+                            description = state.description
+                        ))
+                    },
+                    navController = navController
+                )
             }
         }
         with(SportFieldSearcherRoute.Settings) {

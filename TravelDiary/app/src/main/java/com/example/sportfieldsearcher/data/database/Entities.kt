@@ -16,5 +16,5 @@ data class Field(
     val date: String,
 
     @ColumnInfo
-    val description:String
+    val description:String,
 )

@@ -14,13 +14,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
-import com.example.sportfieldsearcher.ui.utils.TravelDiaryRoute
+import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBar(
     navController: NavHostController,
-    currentRoute: TravelDiaryRoute
+    currentRoute: SportFieldSearcherRoute
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -40,13 +40,13 @@ fun AppBar(
             }
         },
         actions = {
-            if (currentRoute.route == TravelDiaryRoute.Home.route) {
+            if (currentRoute.route == SportFieldSearcherRoute.Home.route) {
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(Icons.Outlined.Search, contentDescription = "Search")
                 }
             }
-            if (currentRoute.route != TravelDiaryRoute.Settings.route) {
-                IconButton(onClick = { navController.navigate(TravelDiaryRoute.Settings.route) }) {
+            if (currentRoute.route != SportFieldSearcherRoute.Settings.route) {
+                IconButton(onClick = { navController.navigate(SportFieldSearcherRoute.Settings.route) }) {
                     Icon(Icons.Outlined.Settings, "Settings")
                 }
             }

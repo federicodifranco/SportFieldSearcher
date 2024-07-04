@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Share
@@ -23,19 +22,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.sportfieldsearcher.data.database.Field
 
 @Composable
-fun FieldDetailsScreen(fieldId: String) {
+fun FieldDetailsScreen(field: Field) {
     val ctx = LocalContext.current
 
     fun shareDetails() {
         val sendIntent = Intent().apply {
             action = Intent.ACTION_SEND
             type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, fieldId)
+            putExtra(Intent.EXTRA_TEXT, field.name)
         }
         val shareIntent = Intent.createChooser(sendIntent, "Share field")
         if (shareIntent.resolveActivity(ctx.packageManager) != null) {
@@ -65,26 +68,26 @@ fun FieldDetailsScreen(fieldId: String) {
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
                 modifier = Modifier
                     .padding(vertical = 16.dp)
-                    .size(128.dp)
-                    .clip(CircleShape)
+                    .height(300.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp))
                     .background(MaterialTheme.colorScheme.secondary)
                     .padding(36.dp)
             )
             Text(
-                fieldId,
+                field.name,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.titleLarge
             )
             Text(
-                "01/01/2024",
+                field.date,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodyLarge
             )
-            Spacer(Modifier.size(8.dp))
             Text(
-                "Description",
+                field.description,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }
