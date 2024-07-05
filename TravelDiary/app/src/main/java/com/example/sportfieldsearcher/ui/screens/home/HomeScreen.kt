@@ -15,13 +15,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -41,14 +37,7 @@ import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
 @Composable
 fun HomeScreen(state: FieldsState, navController: NavHostController) {
     Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                containerColor = MaterialTheme.colorScheme.primary,
-                onClick = { navController.navigate(SportFieldSearcherRoute.AddField.route) }
-            ) {
-                Icon(Icons.Outlined.Add, "Add Field")
-            }
-        },
+
     ) { contentPadding ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -69,7 +58,6 @@ fun HomeScreen(state: FieldsState, navController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FieldItem(item: Field, onClick: () -> Unit) {
     Card(

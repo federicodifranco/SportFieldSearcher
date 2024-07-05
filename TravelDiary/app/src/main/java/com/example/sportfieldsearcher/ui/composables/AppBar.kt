@@ -39,7 +39,7 @@ fun AppBar(
                 }
             }
         },
-        actions = {
+        /*actions = {
             if (currentRoute.route == SportFieldSearcherRoute.Home.route) {
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(Icons.Outlined.Search, contentDescription = "Search")
@@ -50,7 +50,7 @@ fun AppBar(
                     Icon(Icons.Outlined.Settings, "Settings")
                 }
             }
-        },
+        },*/
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         )

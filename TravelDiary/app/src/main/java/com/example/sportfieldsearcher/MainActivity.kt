@@ -21,6 +21,7 @@ import com.example.sportfieldsearcher.data.models.Theme
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherNavGraph
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
 import com.example.sportfieldsearcher.ui.composables.AppBar
+import com.example.sportfieldsearcher.ui.composables.MenuBar
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsScreen
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
 import com.example.sportfieldsearcher.ui.theme.SportFieldSearcherTheme
@@ -58,7 +59,8 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         Scaffold(
-                            topBar = { AppBar(navController, currentRoute) }
+                            topBar = { AppBar(navController, currentRoute) },
+                            bottomBar = { MenuBar(navController) }
                         ) { contentPadding ->
                             SportFieldSearcherNavGraph(
                                 navController,
