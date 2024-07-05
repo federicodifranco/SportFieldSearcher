@@ -1,30 +1,17 @@
 package com.example.sportfieldsearcher.ui.screens.settings
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.sportfieldsearcher.data.repositories.SettingsRepository
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import com.example.sportfieldsearcher.data.models.Theme
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-data class SettingsState(val username: String)
+data class SettingState(val theme: Theme)
 
-class SettingsViewModel (
-    private val repository: SettingsRepository
-) : ViewModel() {
-    var state by mutableStateOf(SettingsState(""))
-        private set
+class SettingsViewModel : ViewModel() {
+    private val _state = MutableStateFlow(SettingState(Theme.System))
+    val state = _state.asStateFlow()
 
-    fun setUsername(value: String) {
-        state = SettingsState(value)
-        viewModelScope.launch { repository.setUsername(value) }
-    }
-
-    init {
-        viewModelScope.launch {
-            state = SettingsState(repository.username.first())
-        }
+    fun changeTheme(theme: Theme) {
+        _state.value = SettingState(theme)
     }
 }

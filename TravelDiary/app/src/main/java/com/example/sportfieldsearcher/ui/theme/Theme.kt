@@ -11,29 +11,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-enum class Theme {
-    Light,
-    Dark,
-    System
-}
-
 private val DarkColorScheme = darkColorScheme(
     primary = Gray,
     secondary = Gray,
     tertiary = Gray,
-    primaryContainer = BlueNavy,
+    primaryContainer = GrassGreen,
     onPrimary = Color.Black,
-    onPrimaryContainer = BoneWhite
+    onPrimaryContainer = White
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = DarkBlue,
+    primary = DarkGreen,
     secondary = Gray,
     tertiary = Gray,
-    primaryContainer = LightBlue,
-    onPrimary = BoneWhite,
-    onPrimaryContainer = DarkBlue,
-    background = BoneWhite
+    primaryContainer = LightGreen,
+    onPrimary = White,
+    onPrimaryContainer = DarkGreen,
+    background = White
 )
 
 @Composable

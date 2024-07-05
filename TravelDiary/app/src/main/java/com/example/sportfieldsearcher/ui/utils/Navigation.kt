@@ -1,7 +1,7 @@
 package com.example.sportfieldsearcher.ui.utils
 
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -16,9 +16,10 @@ import com.example.sportfieldsearcher.ui.FieldsViewModel
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldScreen
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldViewModel
 import com.example.sportfieldsearcher.ui.screens.home.HomeScreen
+import com.example.sportfieldsearcher.ui.screens.fielddetails.FieldDetailsScreen
+import com.example.sportfieldsearcher.ui.screens.settings.SettingState
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsScreen
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
-import com.example.sportfieldsearcher.ui.screens.fielddetails.FieldDetailsScreen
 import org.koin.androidx.compose.koinViewModel
 
 sealed class SportFieldSearcherRoute(
@@ -49,6 +50,8 @@ fun SportFieldSearcherNavGraph(
 ) {
     val fieldsVM = koinViewModel<FieldsViewModel>()
     val fieldsState by fieldsVM.state.collectAsStateWithLifecycle()
+    val settingsviewModel = koinViewModel<SettingsViewModel>()
+    val SettingState by settingsviewModel.state.collectAsStateWithLifecycle()
 
     NavHost(
         navController = navController,
@@ -88,8 +91,11 @@ fun SportFieldSearcherNavGraph(
         }
         with(SportFieldSearcherRoute.Settings) {
             composable(route) {
-                val settingsVm = koinViewModel<SettingsViewModel>()
-                SettingsScreen(settingsVm.state, settingsVm::setUsername)
+                SettingsScreen(
+                    state = SettingState,
+                    navController = navController,
+                    changeTheme = settingsviewModel::changeTheme
+                )
             }
         }
     }

@@ -3,12 +3,10 @@ package com.example.sportfieldsearcher
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.example.sportfieldsearcher.data.database.SportFieldSearcherDatabase
 import com.example.sportfieldsearcher.data.repositories.FieldsRepository
 import com.example.sportfieldsearcher.data.repositories.SettingsRepository
 import com.example.sportfieldsearcher.ui.FieldsViewModel
-import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldScreen
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldViewModel
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -33,7 +31,7 @@ val appModule = module {
 
     viewModel { AddFieldViewModel() }
 
-    viewModel { SettingsViewModel(get()) }
+    viewModel { SettingsViewModel() }
 
     viewModel { FieldsViewModel(get()) }
 }
