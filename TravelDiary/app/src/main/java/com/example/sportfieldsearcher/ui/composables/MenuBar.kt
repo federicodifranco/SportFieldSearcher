@@ -16,7 +16,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
@@ -59,7 +58,8 @@ fun MenuBar(navController: NavHostController) {
 
             Spacer(modifier = Modifier.weight(1.0f, true))
             IconButton(onClick = {
-
+                deleteDuplicates(SportFieldSearcherRoute.Profile.route)
+                navController.navigate(SportFieldSearcherRoute.Profile.route)
             }) {
                 Icon(Icons.Filled.Person, contentDescription = "Profile", modifier = Modifier.size(24.dp))
             }
@@ -72,6 +72,7 @@ fun MenuBar(navController: NavHostController) {
             }) {
                 Icon(Icons.Filled.Settings, contentDescription = "Settings", modifier = Modifier.size(24.dp))
             }
+            Spacer(modifier = Modifier.weight(1.0f, true))
         }
     }
 }

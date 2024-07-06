@@ -3,6 +3,7 @@ package com.example.sportfieldsearcher.ui.screens.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -36,22 +38,37 @@ import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
 
 @Composable
 fun HomeScreen(state: FieldsState, navController: NavHostController) {
-    Scaffold(
-
-    ) { contentPadding ->
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 80.dp),
-            modifier = Modifier.padding(contentPadding)
+    Scaffold() { contentPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
         ) {
-            items(state.fields) { item ->
-                FieldItem(
-                    item,
-                    onClick = {
-                        navController.navigate(SportFieldSearcherRoute.FieldDetails.buildRoute(item.id.toString()))
+            if (state.fields.isNotEmpty()) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 80.dp)
+                ) {
+                    items(state.fields) { item ->
+                        FieldItem(
+                            item,
+                            onClick = {
+                                navController.navigate(SportFieldSearcherRoute.FieldDetails.buildRoute(item.id.toString()))
+                            }
+                        )
                     }
+                }
+            } else {
+                Text(
+                    text = "No fields found.\nTap the button to add a new field.",
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                        .wrapContentSize(Alignment.Center)
                 )
             }
         }

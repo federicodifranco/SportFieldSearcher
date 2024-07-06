@@ -22,7 +22,7 @@ val appModule = module {
             get(),
             SportFieldSearcherDatabase::class.java,
             "Sport-Field"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     single { SettingsRepository(get()) }

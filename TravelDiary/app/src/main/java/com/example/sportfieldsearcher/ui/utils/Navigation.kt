@@ -1,23 +1,27 @@
 package com.example.sportfieldsearcher.ui.utils
 
-import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.sportfieldsearcher.data.database.Field
+import com.example.sportfieldsearcher.data.database.User
 import com.example.sportfieldsearcher.ui.FieldsViewModel
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldScreen
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldViewModel
 import com.example.sportfieldsearcher.ui.screens.home.HomeScreen
 import com.example.sportfieldsearcher.ui.screens.fielddetails.FieldDetailsScreen
-import com.example.sportfieldsearcher.ui.screens.settings.SettingState
+import com.example.sportfieldsearcher.ui.screens.profile.ProfileScreen
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsScreen
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -37,9 +41,16 @@ sealed class SportFieldSearcherRoute(
     }
     data object AddField : SportFieldSearcherRoute("fields/add", "Add Field")
     data object Settings : SportFieldSearcherRoute("settings", "Settings")
+    data object Profile : SportFieldSearcherRoute(
+        "profile",
+        "Profile",
+        //listOf(navArgument("userId") { type = NavType.IntType })
+    ) {
+        //fun buildRoute(userId: Int) = "profile/$userId"
+    }
 
     companion object {
-        val routes = setOf(Home, FieldDetails, AddField, Settings)
+        val routes = setOf(Home, FieldDetails, AddField, Settings, Profile)
     }
 }
 
@@ -98,5 +109,20 @@ fun SportFieldSearcherNavGraph(
                 )
             }
         }
+        with(SportFieldSearcherRoute.Profile) {
+            composable(route, arguments) { backStackEntry: NavBackStackEntry ->
+                val userId = backStackEntry.arguments?.getInt("userId")
+                // Create a temporary user
+                val tempUser = User(
+                    userId = userId ?: 0,
+                    username = "Temporary User",
+                    email = "temporary@example.com",
+                    password = "password",
+                    profilePicture = null
+                )
+                ProfileScreen(user = tempUser, navController = navController)
+            }
+        }
+
     }
 }

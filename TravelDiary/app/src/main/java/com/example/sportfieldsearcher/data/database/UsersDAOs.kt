@@ -3,18 +3,17 @@ package com.example.sportfieldsearcher.data.database
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface FieldsDAO {
-    @Query("SELECT * FROM field ORDER BY name ASC")
-    fun getAll(): Flow<List<Field>>
+interface  UsersDAOs {
+    @Query("SELECT * FROM user ORDER BY username ASC")
+    fun getAll(): Flow<List<User>>
 
     @Upsert
-    suspend fun upsert(field: Field)
+    suspend fun upsert(user: User)
 
     @Delete
-    suspend fun delete(field: Field)
+    suspend fun delete(item: User)
 }
