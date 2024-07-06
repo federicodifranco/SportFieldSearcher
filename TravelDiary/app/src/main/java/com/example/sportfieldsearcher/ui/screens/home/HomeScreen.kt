@@ -33,7 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.sportfieldsearcher.data.database.Field
-import com.example.sportfieldsearcher.ui.FieldsState
+import com.example.sportfieldsearcher.ui.controllers.FieldsState
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
 
 @Composable

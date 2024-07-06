@@ -2,6 +2,7 @@ package com.example.sportfieldsearcher.ui.composables
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -39,18 +40,17 @@ fun AppBar(
                 }
             }
         },
-        /*actions = {
-            if (currentRoute.route == SportFieldSearcherRoute.Home.route) {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(Icons.Outlined.Search, contentDescription = "Search")
+        actions = {
+            if (currentRoute is SportFieldSearcherRoute.Profile) {
+                IconButton(onClick = {
+                    navController.navigate(SportFieldSearcherRoute.Registration.route) {
+                        popUpTo(SportFieldSearcherRoute.Profile.route) { inclusive = true }
+                    }
+                }) {
+                    Icon(Icons.Outlined.Logout, "Logout")
                 }
             }
-            if (currentRoute.route != SportFieldSearcherRoute.Settings.route) {
-                IconButton(onClick = { navController.navigate(SportFieldSearcherRoute.Settings.route) }) {
-                    Icon(Icons.Outlined.Settings, "Settings")
-                }
-            }
-        },*/
+        },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         )
