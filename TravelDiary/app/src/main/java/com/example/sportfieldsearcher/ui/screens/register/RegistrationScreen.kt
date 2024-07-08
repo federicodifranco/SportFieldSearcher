@@ -17,7 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -39,7 +38,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -50,6 +48,7 @@ import androidx.navigation.NavHostController
 import com.example.sportfieldsearcher.ui.controllers.UsersState
 import com.example.sportfieldsearcher.ui.composables.ImageWithPlaceholder
 import com.example.sportfieldsearcher.ui.composables.Size
+import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
 
 val PADDING = 10.dp
 
@@ -61,7 +60,7 @@ fun RegistrationScreen(
     onSubmit: () -> Unit,
     navController: NavHostController
 ) {
-    val context = LocalContext.current
+    //val context = LocalContext.current
 
     val snackbarHostState = remember { SnackbarHostState() }
     var showSnackbar by remember { mutableStateOf(false) }
@@ -165,7 +164,7 @@ fun RegistrationScreen(
             }
             TextButton(onClick = {
                 navController.popBackStack()
-                //navController.navigate(SportFieldSearcherRoute.Login.route)
+                navController.navigate(SportFieldSearcherRoute.Login.route)
             }) {
                 Text("Already have an account? Log in")
             }

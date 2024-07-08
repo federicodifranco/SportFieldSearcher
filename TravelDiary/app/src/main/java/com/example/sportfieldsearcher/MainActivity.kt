@@ -55,17 +55,28 @@ class MainActivity : ComponentActivity() {
                             derivedStateOf {
                                 SportFieldSearcherRoute.routes.find {
                                     it.route == backStackEntry?.destination?.route
-                                } ?: SportFieldSearcherRoute.Home
+                                } ?: SportFieldSearcherRoute.Login
                             }
                         }
-                        Scaffold(
-                            topBar = { AppBar(navController, currentRoute) },
-                            bottomBar = { MenuBar(navController) }
-                        ) { contentPadding ->
-                            SportFieldSearcherNavGraph(
-                                navController,
-                                modifier = Modifier.padding(contentPadding)
-                            )
+                        if (currentRoute.route != SportFieldSearcherRoute.Login.route && currentRoute.route != SportFieldSearcherRoute.Registration.route) {
+                            Scaffold(
+                                topBar = { AppBar(navController, currentRoute) },
+                                bottomBar = { MenuBar(navController) }
+                            ) { contentPadding ->
+                                SportFieldSearcherNavGraph(
+                                    navController,
+                                    modifier = Modifier.padding(contentPadding)
+                                )
+                            }
+                        } else {
+                            Scaffold(
+                                topBar = { AppBar(navController, currentRoute) }
+                            ) { contentPadding ->
+                                SportFieldSearcherNavGraph(
+                                    navController,
+                                    modifier = Modifier.padding(contentPadding)
+                                )
+                            }
                         }
                     }
                 }

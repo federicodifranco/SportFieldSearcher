@@ -12,6 +12,7 @@ import com.example.sportfieldsearcher.ui.controllers.AppViewModel
 import com.example.sportfieldsearcher.ui.controllers.FieldsViewModel
 import com.example.sportfieldsearcher.ui.controllers.UsersViewModel
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldViewModel
+import com.example.sportfieldsearcher.ui.screens.login.LoginViewModel
 import com.example.sportfieldsearcher.ui.screens.register.RegistrationViewModel
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -42,6 +43,7 @@ val appModule = module {
 
     viewModel { AddFieldViewModel() }
     viewModel { RegistrationViewModel() }
+    viewModel { LoginViewModel() }
     viewModel { SettingsViewModel() }
     viewModel { FieldsViewModel(get()) }
     viewModel { AppViewModel(get()) }

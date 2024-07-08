@@ -2,9 +2,6 @@ package com.example.sportfieldsearcher.ui.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NamedNavArgument
@@ -23,6 +20,8 @@ import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldScreen
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldViewModel
 import com.example.sportfieldsearcher.ui.screens.home.HomeScreen
 import com.example.sportfieldsearcher.ui.screens.fielddetails.FieldDetailsScreen
+import com.example.sportfieldsearcher.ui.screens.login.LoginScreen
+import com.example.sportfieldsearcher.ui.screens.login.LoginViewModel
 import com.example.sportfieldsearcher.ui.screens.profile.ProfileScreen
 import com.example.sportfieldsearcher.ui.screens.register.RegistrationScreen
 import com.example.sportfieldsearcher.ui.screens.register.RegistrationViewModel
@@ -54,13 +53,14 @@ sealed class SportFieldSearcherRoute(
         //fun buildRoute(userId: Int) = "profile/$userId"
     }
 
+    data object Login : SportFieldSearcherRoute("login", "Login")
     data object Home : SportFieldSearcherRoute("fields", "SportFieldSearcher")
     data object AddField : SportFieldSearcherRoute("fields/add", "Add Field")
     data object Settings : SportFieldSearcherRoute("settings", "Settings")
     data object Registration : SportFieldSearcherRoute("registration", "Registration")
 
     companion object {
-        val routes = setOf(Home, FieldDetails, AddField, Settings, Profile, Registration)
+        val routes = setOf(Home, FieldDetails, AddField, Settings, Profile, Registration, Login)
     }
 }
 
@@ -80,11 +80,15 @@ fun SportFieldSearcherNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = SportFieldSearcherRoute.Home.route,
+        startDestination = SportFieldSearcherRoute.Login.route,
         modifier = modifier
     ) {
         with(SportFieldSearcherRoute.Home) {
             composable(route) {
+                /*if (appState.userId == null) {
+                    navigateAndClearBackstack(route, SportFieldSearcherRoute.Login.route, navController)
+                    return@composable
+                }*/
                 HomeScreen(fieldsState, navController)
             }
         }
@@ -167,6 +171,41 @@ fun SportFieldSearcherNavGraph(
                     },
                     navController = navController
                 )
+            }
+        }
+        with(SportFieldSearcherRoute.Login) {
+            composable(route) {
+                val loginViewModel = koinViewModel<LoginViewModel>()
+                val state by loginViewModel.state.collectAsStateWithLifecycle()
+                if (appState.userId != null) {
+                    navController.popBackStack()
+                    navController.navigate(SportFieldSearcherRoute.Home.route)
+                } else {
+                    LoginScreen(
+                        state = state,
+                        actions = loginViewModel.actions,
+                        onLogin = { email: String, password: String, errorMessage: () -> Unit ->
+                            onQueryComplete(
+                                usersViewModel.getUserOnLogin(email = email, password = password),
+                                onComplete = { result: Any ->
+                                    appViewModel.changeUserId((result as User).userId)
+                                        .invokeOnCompletion {
+                                            if (it == null)
+                                                navigateAndClearBackstack(route, SportFieldSearcherRoute.Home.route, navController)
+                                        }
+                                },
+                                checkResult = { result: Any? ->
+                                    val check = result != null && result is User
+                                    if (!check) {
+                                        errorMessage()
+                                    }
+                                    return@onQueryComplete check
+                                }
+                            )
+                        },
+                        navController = navController
+                    )
+                }
             }
         }
     }

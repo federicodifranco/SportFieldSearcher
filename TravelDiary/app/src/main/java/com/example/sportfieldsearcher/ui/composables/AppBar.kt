@@ -13,9 +13,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.sportfieldsearcher.ui.controllers.AppViewModel
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,6 +28,8 @@ fun AppBar(
     navController: NavHostController,
     currentRoute: SportFieldSearcherRoute
 ) {
+    val appViewModel = koinViewModel<AppViewModel>()
+    val appState by appViewModel.state.collectAsStateWithLifecycle()
     CenterAlignedTopAppBar(
         title = {
             Text(
@@ -41,10 +48,18 @@ fun AppBar(
             }
         },
         actions = {
-            if (currentRoute is SportFieldSearcherRoute.Profile) {
+            if (currentRoute.route == SportFieldSearcherRoute.Profile.route && navController.currentBackStackEntry?.arguments?.getInt("userId") == appState.userId) {
+                IconButton(onClick = { navController.navigate(SportFieldSearcherRoute.Settings.route) }) {
+                    Icon(Icons.Outlined.Settings, "Settings")
+                }
+            }
+            if (currentRoute.route == SportFieldSearcherRoute.Settings.route) {
                 IconButton(onClick = {
-                    navController.navigate(SportFieldSearcherRoute.Registration.route) {
-                        popUpTo(SportFieldSearcherRoute.Profile.route) { inclusive = true }
+                    appViewModel.changeUserId(null).invokeOnCompletion {
+                        if (it == null) {
+                            SportFieldSearcherRoute.routes.forEach { route: SportFieldSearcherRoute -> navController.popBackStack(route.route, true) }
+                            navController.navigate(SportFieldSearcherRoute.Login.route)
+                        }
                     }
                 }) {
                     Icon(Icons.Outlined.Logout, "Logout")
