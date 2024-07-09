@@ -45,9 +45,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.sportfieldsearcher.ui.controllers.UsersState
 import com.example.sportfieldsearcher.ui.composables.ImageWithPlaceholder
 import com.example.sportfieldsearcher.ui.composables.Size
+import com.example.sportfieldsearcher.ui.controllers.UsersState
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
 
 val PADDING = 10.dp

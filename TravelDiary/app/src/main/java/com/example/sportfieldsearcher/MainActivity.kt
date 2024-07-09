@@ -18,13 +18,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.sportfieldsearcher.data.models.Theme
-import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherNavGraph
-import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
 import com.example.sportfieldsearcher.ui.composables.AppBar
 import com.example.sportfieldsearcher.ui.composables.MenuBar
-import com.example.sportfieldsearcher.ui.screens.settings.SettingsScreen
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
 import com.example.sportfieldsearcher.ui.theme.SportFieldSearcherTheme
+import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherNavGraph
+import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

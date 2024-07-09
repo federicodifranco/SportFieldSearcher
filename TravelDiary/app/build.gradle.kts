@@ -66,6 +66,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("io.insert-koin:koin-androidx-compose:3.5.3")
     implementation("com.android.volley:volley:1.2.1")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.8")
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")

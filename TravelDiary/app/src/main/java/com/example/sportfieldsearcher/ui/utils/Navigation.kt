@@ -2,6 +2,9 @@ package com.example.sportfieldsearcher.ui.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NamedNavArgument
@@ -11,15 +14,19 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.sportfieldsearcher.data.database.Field
-import com.example.sportfieldsearcher.data.database.User
+import com.example.sportfieldsearcher.data.database.entities.CategoryType
+import com.example.sportfieldsearcher.data.database.entities.Field
+import com.example.sportfieldsearcher.data.database.entities.FieldWithUsers
+import com.example.sportfieldsearcher.data.database.entities.PrivacyType
+import com.example.sportfieldsearcher.data.database.entities.User
+import com.example.sportfieldsearcher.data.database.entities.UserWithFields
 import com.example.sportfieldsearcher.ui.controllers.AppViewModel
 import com.example.sportfieldsearcher.ui.controllers.FieldsViewModel
 import com.example.sportfieldsearcher.ui.controllers.UsersViewModel
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldScreen
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldViewModel
-import com.example.sportfieldsearcher.ui.screens.home.HomeScreen
 import com.example.sportfieldsearcher.ui.screens.fielddetails.FieldDetailsScreen
+import com.example.sportfieldsearcher.ui.screens.home.HomeScreen
 import com.example.sportfieldsearcher.ui.screens.login.LoginScreen
 import com.example.sportfieldsearcher.ui.screens.login.LoginViewModel
 import com.example.sportfieldsearcher.ui.screens.profile.ProfileScreen
@@ -40,22 +47,22 @@ sealed class SportFieldSearcherRoute(
     data object FieldDetails : SportFieldSearcherRoute(
         "fields/{fieldId}",
         "Field Details",
-        listOf(navArgument("fieldId") { type = NavType.StringType })
+        listOf(navArgument("fieldId") { type = NavType.IntType })
     ) {
-        fun buildRoute(fieldId: String) = "fields/$fieldId"
+        fun buildRoute(fieldId: Int) = "fields/$fieldId"
     }
 
     data object Profile : SportFieldSearcherRoute(
-        "profile",
+        "profile/{userId}",
         "Profile",
-        //listOf(navArgument("userId") { type = NavType.IntType })
+        listOf(navArgument("userId") { type = NavType.IntType })
     ) {
-        //fun buildRoute(userId: Int) = "profile/$userId"
+        fun buildRoute(userId: Int) = "profile/$userId"
     }
 
     data object Login : SportFieldSearcherRoute("login", "Login")
-    data object Home : SportFieldSearcherRoute("fields", "SportFieldSearcher")
-    data object AddField : SportFieldSearcherRoute("fields/add", "Add Field")
+    data object Home : SportFieldSearcherRoute("fields", "Fields")
+    data object AddField : SportFieldSearcherRoute("add", "Add Field")
     data object Settings : SportFieldSearcherRoute("settings", "Settings")
     data object Registration : SportFieldSearcherRoute("registration", "Registration")
 
@@ -73,8 +80,8 @@ fun SportFieldSearcherNavGraph(
     val usersState by usersViewModel.state.collectAsStateWithLifecycle()
     val fieldsVM = koinViewModel<FieldsViewModel>()
     val fieldsState by fieldsVM.state.collectAsStateWithLifecycle()
-    val settingsviewModel = koinViewModel<SettingsViewModel>()
-    val SettingState by settingsviewModel.state.collectAsStateWithLifecycle()
+    val settingsViewModel = koinViewModel<SettingsViewModel>()
+    val settingState by settingsViewModel.state.collectAsStateWithLifecycle()
     val appViewModel = koinViewModel<AppViewModel>()
     val appState by appViewModel.state.collectAsStateWithLifecycle()
 
@@ -85,60 +92,163 @@ fun SportFieldSearcherNavGraph(
     ) {
         with(SportFieldSearcherRoute.Home) {
             composable(route) {
-                /*if (appState.userId == null) {
+                if (appState.userId == null) {
                     navigateAndClearBackstack(route, SportFieldSearcherRoute.Login.route, navController)
                     return@composable
-                }*/
-                HomeScreen(fieldsState, navController)
+                }
+                val createdFields =
+                    fieldsState.fieldsWithUsers.filter { it.field.fieldAddedId == appState.userId }
+                val publicFields =
+                    fieldsState.fieldsWithUsers.filter { it.field.privacyType == PrivacyType.PUBLIC }
+                HomeScreen(
+                    publicFields = publicFields,
+                    createdFields = createdFields,
+                    navController = navController,
+                )
             }
         }
         with(SportFieldSearcherRoute.FieldDetails) {
             composable(route, arguments) { backStackEntry ->
-                val field = requireNotNull(fieldsState.fields.find { field ->
-                    field.id == backStackEntry.arguments?.getString("fieldId")?.toInt()
-                })
-                FieldDetailsScreen(field)
+                if (appState.userId == null) {
+                    navigateAndClearBackstack(route, SportFieldSearcherRoute.Login.route, navController)
+                    return@composable
+                }
+                var fieldWithUsers by remember {
+                    mutableStateOf(
+                        FieldWithUsers(
+                            field = Field(
+                                fieldId = -1,
+                                name = "",
+                                description = "",
+                                date = "",
+                                category = CategoryType.NONE,
+                                privacyType = PrivacyType.NONE,
+                                fieldAddedId = -1
+                            ),
+                            connection = emptyList()
+                        )
+                    )
+                }
+                var user by remember {
+                    mutableStateOf(
+                        User(
+                            userId = -1,
+                            username = "",
+                            email = "",
+                            password = "",
+                            profilePicture = null
+                        )
+                    )
+                }
+                var isFieldCoroutineFinished by remember { mutableStateOf(false) }
+                var isUserCoroutineFinished by remember { mutableStateOf(false) }
+                onQueryComplete(
+                    result = fieldsVM.getFieldWithUsersById(
+                        backStackEntry.arguments?.getInt("fieldId") ?: -1
+                    ),
+                    onComplete = { result: Any ->
+                        fieldWithUsers = result as FieldWithUsers
+                        isFieldCoroutineFinished = true
+                    },
+                    checkResult = { result: Any? ->
+                        result != null && result is FieldWithUsers
+                    }
+                )
+                onQueryComplete(
+                    result = usersViewModel.getUserInfo(fieldWithUsers.field.fieldAddedId),
+                    onComplete = { result: Any ->
+                        user = result as User
+                        isUserCoroutineFinished = true
+                    },
+                    checkResult = { result: Any? ->
+                        result != null && result is User
+                    }
+                )
+                if (isFieldCoroutineFinished && isUserCoroutineFinished) {
+                    FieldDetailsScreen(
+                        fieldWithUsers,
+                        fieldAdded = user,
+                        navController = navController,
+                        loggedUserId = appState.userId!!,
+                        onDelete = {
+                            fieldsVM.deleteField(fieldWithUsers.field)
+                            navController.navigateUp()
+                        }
+                    )
+                }
             }
         }
         with(SportFieldSearcherRoute.AddField) {
             composable(route) {
+                if (appState.userId == null) {
+                    navigateAndClearBackstack(route, SportFieldSearcherRoute.Login.route, navController)
+                    return@composable
+                }
                 val addFieldVm = koinViewModel<AddFieldViewModel>()
                 val state by addFieldVm.state.collectAsStateWithLifecycle()
                 AddFieldScreen(
-                    state,
-                    addFieldVm.actions,
-                    onCreate = {
-                        fieldsVM.addField(Field(
-                            name = state.location,
-                            date = state.date,
-                            description = state.description
-                        ))
-                    },
-                    navController = navController
+                    state = state,
+                    actions = addFieldVm.actions,
+                    onSubmit = {
+                        fieldsVM.addField(state.toField(appState.userId!!))
+                        navController.navigateUp()
+                    }
                 )
             }
         }
         with(SportFieldSearcherRoute.Settings) {
             composable(route) {
                 SettingsScreen(
-                    state = SettingState,
+                    state = settingState,
                     navController = navController,
-                    changeTheme = settingsviewModel::changeTheme
+                    changeTheme = settingsViewModel::changeTheme
                 )
             }
         }
         with(SportFieldSearcherRoute.Profile) {
             composable(route, arguments) { backStackEntry: NavBackStackEntry ->
-                val userId = backStackEntry.arguments?.getInt("userId")
-                // Create a temporary user
-                val tempUser = User(
-                    userId = userId ?: 0,
-                    username = "Temporary User",
-                    email = "",
-                    password = "",
-                    profilePicture = null
+                if (appState.userId == null) {
+                    navigateAndClearBackstack(route, SportFieldSearcherRoute.Login.route, navController)
+                    return@composable
+                }
+                var userWithFields by remember {
+                    mutableStateOf(
+                        UserWithFields(
+                            user = User(
+                                userId = -1,
+                                username = "",
+                                email = "",
+                                password = "",
+                                profilePicture = null
+                            ),
+                            fields = emptyList(),
+                            createdFields = emptyList()
+                        )
+                    )
+                }
+                var isCoroutineFinished by remember { mutableStateOf(false) }
+
+                onQueryComplete(
+                    result = usersViewModel.getUserWithFieldsById(
+                        backStackEntry.arguments?.getInt(
+                            "userId"
+                        ) ?: -1
+                    ),
+                    onComplete = { result: Any ->
+                        userWithFields = result as UserWithFields
+                        isCoroutineFinished = true
+                    },
+                    checkResult = { result: Any? ->
+                        result != null && result is UserWithFields
+                    }
                 )
-                ProfileScreen(user = tempUser, navController = navController)
+                if (isCoroutineFinished) {
+                    ProfileScreen(
+                        user = userWithFields.user,
+                        fields = userWithFields.fields,
+                        navController = navController
+                    )
+                }
             }
         }
         with(SportFieldSearcherRoute.Registration) {

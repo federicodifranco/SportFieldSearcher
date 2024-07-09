@@ -2,7 +2,7 @@ package com.example.sportfieldsearcher.ui.screens.register
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
-import com.example.sportfieldsearcher.data.database.User
+import com.example.sportfieldsearcher.data.database.entities.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

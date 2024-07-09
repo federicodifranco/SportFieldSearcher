@@ -17,8 +17,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.sportfieldsearcher.ui.controllers.AppViewModel
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
+import org.koin.androidx.compose.koinViewModel
+import androidx.compose.runtime.getValue
 
 @Composable
 fun MenuBar(navController: NavHostController) {
@@ -57,9 +61,12 @@ fun MenuBar(navController: NavHostController) {
             }
 
             Spacer(modifier = Modifier.weight(1.0f, true))
+            val appViewModel = koinViewModel<AppViewModel>()
+            val appState by appViewModel.state.collectAsStateWithLifecycle()
             IconButton(onClick = {
                 deleteDuplicates(SportFieldSearcherRoute.Profile.route)
-                navController.navigate(SportFieldSearcherRoute.Profile.route)
+                val userId = appState.userId ?: -1
+                navController.navigate(SportFieldSearcherRoute.Profile.buildRoute(userId))
             }) {
                 Icon(Icons.Filled.Person, contentDescription = "Profile", modifier = Modifier.size(24.dp))
             }

@@ -5,6 +5,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.example.sportfieldsearcher.data.database.SportFieldSearcherDatabase
 import com.example.sportfieldsearcher.data.repositories.AppRepository
+import com.example.sportfieldsearcher.data.repositories.ConnectionRepository
 import com.example.sportfieldsearcher.data.repositories.FieldsRepository
 import com.example.sportfieldsearcher.data.repositories.SettingsRepository
 import com.example.sportfieldsearcher.data.repositories.UsersRepository
@@ -36,16 +37,27 @@ val appModule = module {
         )
     }
 
+    single {
+        FieldsRepository(
+            get<SportFieldSearcherDatabase>().fieldsDAO(),
+        )
+    }
+
+    single {
+        ConnectionRepository(
+            get<SportFieldSearcherDatabase>().connectionDAO(),
+        )
+    }
+
     single { get<Context>().dataStore }
     single { SettingsRepository(get()) }
     single { AppRepository(get()) }
-    single { FieldsRepository(get<SportFieldSearcherDatabase>().fieldsDAO())}
 
     viewModel { AddFieldViewModel() }
-    viewModel { RegistrationViewModel() }
-    viewModel { LoginViewModel() }
-    viewModel { SettingsViewModel() }
-    viewModel { FieldsViewModel(get()) }
     viewModel { AppViewModel(get()) }
+    viewModel { FieldsViewModel(get()) }
+    viewModel { LoginViewModel() }
+    viewModel { RegistrationViewModel() }
+    viewModel { SettingsViewModel() }
     viewModel { UsersViewModel(get()) }
 }

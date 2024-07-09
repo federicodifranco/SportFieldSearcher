@@ -1,4 +1,4 @@
-package com.example.sportfieldsearcher.data.database
+package com.example.sportfieldsearcher.data.database.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
