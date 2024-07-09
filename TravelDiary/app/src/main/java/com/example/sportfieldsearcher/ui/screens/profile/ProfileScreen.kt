@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import com.example.sportfieldsearcher.data.database.entities.Field
+import com.example.sportfieldsearcher.data.database.entities.PrivacyType
 import com.example.sportfieldsearcher.data.database.entities.User
 import com.example.sportfieldsearcher.ui.composables.ImageWithPlaceholder
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
@@ -60,7 +61,7 @@ fun ProfileScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Spacer(Modifier.size(10.dp))
-            AllFields(fields = fields.take(20), user = user, navController = navController)
+            AllFields(fields = fields.take(20).filter { it.privacyType == PrivacyType.PUBLIC }, user = user, navController = navController)
         }
     }
 }

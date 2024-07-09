@@ -1,6 +1,8 @@
 package com.example.sportfieldsearcher.ui.screens.register
 
+import android.Manifest
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -49,8 +52,9 @@ import com.example.sportfieldsearcher.ui.composables.ImageWithPlaceholder
 import com.example.sportfieldsearcher.ui.composables.Size
 import com.example.sportfieldsearcher.ui.controllers.UsersState
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
-
-val PADDING = 10.dp
+import com.example.sportfieldsearcher.ui.utils.rememberCameraLauncher
+import com.example.sportfieldsearcher.ui.utils.rememberGalleryLauncher
+import com.example.sportfieldsearcher.ui.utils.rememberPermission
 
 @Composable
 fun RegistrationScreen(
@@ -60,14 +64,13 @@ fun RegistrationScreen(
     onSubmit: () -> Unit,
     navController: NavHostController
 ) {
-    //val context = LocalContext.current
+    val context = LocalContext.current
 
     val snackbarHostState = remember { SnackbarHostState() }
     var showSnackbar by remember { mutableStateOf(false) }
     var snackbarMessage by remember { mutableStateOf("") }
 
-    // Camera
-    /*val cameraLauncher = rememberCameraLauncher { imageUri -> actions.setProfilePicture(imageUri) }
+    val cameraLauncher = rememberCameraLauncher { imageUri -> actions.setProfilePicture(imageUri) }
     val cameraPermission = rememberPermission(Manifest.permission.CAMERA) { status ->
         if (status.isGranted)
             cameraLauncher.captureImage()
@@ -84,8 +87,7 @@ fun RegistrationScreen(
 
     val galleryLauncher =
         rememberGalleryLauncher { imageUri -> actions.setProfilePicture(imageUri) }
-    */
-    // UI
+
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets.exclude(NavigationBarDefaults.windowInsets)
@@ -141,7 +143,7 @@ fun RegistrationScreen(
             )
             Row {
                 Button(
-                    onClick = { },
+                    onClick = ::takePicture,
                     contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                 ) {
                     Icon(Icons.Filled.CameraAlt, contentDescription = "Camera", modifier = Modifier.size(24.dp))
@@ -150,7 +152,7 @@ fun RegistrationScreen(
                 }
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Button(
-                    onClick = {},
+                    onClick = { galleryLauncher.selectImage() },
                     contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                 ) {
                     Icon(Icons.Filled.Image, contentDescription = "Gallery Icon", modifier = Modifier.size(24.dp))
@@ -159,7 +161,7 @@ fun RegistrationScreen(
                 }
             }
             if (state.profilePicture != Uri.EMPTY) {
-                Spacer(Modifier.size(PADDING))
+                Spacer(Modifier.size(10.dp))
                 ImageWithPlaceholder(uri = state.profilePicture, size = Size.Large)
             }
             TextButton(onClick = {
@@ -170,7 +172,7 @@ fun RegistrationScreen(
             }
             HorizontalDivider()
             Button(
-                modifier = Modifier.padding(bottom = PADDING),
+                modifier = Modifier.padding(bottom = 10.dp),
                 onClick = {
                     if (!state.canSubmit || usersState.users.any { it.email == state.email }) {
                         when {

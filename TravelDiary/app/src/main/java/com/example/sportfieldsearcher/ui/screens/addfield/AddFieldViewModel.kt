@@ -13,7 +13,8 @@ data class AddFieldState(
     val date: String = "",
     val description: String = "",
     val category: CategoryType,
-    val privacyType: PrivacyType
+    val privacyType: PrivacyType,
+    val city: String = ""
 ) {
     val canSubmit
         get() = name.isNotBlank()
@@ -21,6 +22,7 @@ data class AddFieldState(
                 && description.isNotBlank()
                 && category != CategoryType.NONE
                 && privacyType != PrivacyType.NONE
+                && city.isNotBlank()
 
     fun toField(fieldAddedId: Int) = Field(
         name = name,
@@ -28,7 +30,8 @@ data class AddFieldState(
         description = description,
         category = category,
         privacyType = privacyType,
-        fieldAddedId = fieldAddedId
+        fieldAddedId = fieldAddedId,
+        city = city
     )
 }
 
@@ -38,6 +41,7 @@ interface AddFieldActions {
     fun setDescription(description: String)
     fun setCategory(category: CategoryType)
     fun setPrivacyType(privacyType: PrivacyType)
+    fun setCity(city: String)
 }
 
 class AddFieldViewModel : ViewModel() {
@@ -59,5 +63,8 @@ class AddFieldViewModel : ViewModel() {
 
         override fun setPrivacyType(privacyType: PrivacyType) =
             _state.update { it.copy(privacyType = privacyType) }
+
+        override fun setCity(city: String) =
+            _state.update { it.copy(city = city) }
     }
 }

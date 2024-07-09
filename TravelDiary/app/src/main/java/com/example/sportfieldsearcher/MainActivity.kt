@@ -1,8 +1,10 @@
 package com.example.sportfieldsearcher
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,12 +24,19 @@ import com.example.sportfieldsearcher.ui.composables.AppBar
 import com.example.sportfieldsearcher.ui.composables.MenuBar
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
 import com.example.sportfieldsearcher.ui.theme.SportFieldSearcherTheme
+import com.example.sportfieldsearcher.ui.utils.LocationService
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherNavGraph
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
+import org.koin.android.ext.android.get
+
+@SuppressLint("StaticFieldLeak")
+private lateinit var locationService: LocationService
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        locationService = get<LocationService>()
         setContent {
 
             val settingsviewModel by viewModels<SettingsViewModel>()
@@ -81,5 +90,14 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+    override fun onPause() {
+        super.onPause()
+        locationService.pauseLocationRequest()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        locationService.resumeLocationRequest()
     }
 }

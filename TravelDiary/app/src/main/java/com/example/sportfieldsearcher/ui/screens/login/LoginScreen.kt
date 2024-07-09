@@ -2,6 +2,7 @@ package com.example.sportfieldsearcher.ui.screens.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -34,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -65,22 +67,26 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(
-                    top = 0.dp,
-                    bottom = 0.dp,
+                    top = 10.dp,
+                    bottom = 10.dp,
                     start = contentPadding.calculateStartPadding(LayoutDirection.Ltr),
                     end = contentPadding.calculateEndPadding(LayoutDirection.Rtl)
                 )
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Logo",
+            Box(
                 modifier = Modifier
-                    .padding(top = 10.dp)
-                    .size(150.dp)
-                    .clip(shape = CircleShape)
-            )
+                    .size(200.dp)
+                    .clip(CircleShape)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "Logo",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
             Text(
                 text = "Login", fontWeight = FontWeight.Bold, fontSize = 24.sp
             )

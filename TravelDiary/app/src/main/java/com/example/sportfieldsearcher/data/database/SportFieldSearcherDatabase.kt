@@ -9,7 +9,7 @@ import com.example.sportfieldsearcher.data.database.entities.Connection
 import com.example.sportfieldsearcher.data.database.entities.Field
 import com.example.sportfieldsearcher.data.database.entities.User
 
-@Database(entities = [Field::class, User::class, Connection::class], version = 4)
+@Database(entities = [Field::class, User::class, Connection::class], version = 5)
 abstract class SportFieldSearcherDatabase : RoomDatabase(){
     abstract fun fieldsDAO() : FieldsDAO
     abstract  fun usersDAO() : UsersDAOs

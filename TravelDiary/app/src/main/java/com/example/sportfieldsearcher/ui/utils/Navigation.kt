@@ -26,6 +26,7 @@ import com.example.sportfieldsearcher.ui.controllers.UsersViewModel
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldScreen
 import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldViewModel
 import com.example.sportfieldsearcher.ui.screens.fielddetails.FieldDetailsScreen
+import com.example.sportfieldsearcher.ui.screens.fieldmap.FieldMapScreen
 import com.example.sportfieldsearcher.ui.screens.home.HomeScreen
 import com.example.sportfieldsearcher.ui.screens.login.LoginScreen
 import com.example.sportfieldsearcher.ui.screens.login.LoginViewModel
@@ -60,6 +61,7 @@ sealed class SportFieldSearcherRoute(
         fun buildRoute(userId: Int) = "profile/$userId"
     }
 
+    data object FieldsMap: SportFieldSearcherRoute("map", "Fields Map")
     data object Login : SportFieldSearcherRoute("login", "Login")
     data object Home : SportFieldSearcherRoute("fields", "Fields")
     data object AddField : SportFieldSearcherRoute("add", "Add Field")
@@ -67,7 +69,7 @@ sealed class SportFieldSearcherRoute(
     data object Registration : SportFieldSearcherRoute("registration", "Registration")
 
     companion object {
-        val routes = setOf(Home, FieldDetails, AddField, Settings, Profile, Registration, Login)
+        val routes = setOf(Home, FieldDetails, FieldsMap, AddField, Settings, Profile, Registration, Login)
     }
 }
 
@@ -123,7 +125,8 @@ fun SportFieldSearcherNavGraph(
                                 date = "",
                                 category = CategoryType.NONE,
                                 privacyType = PrivacyType.NONE,
-                                fieldAddedId = -1
+                                fieldAddedId = -1,
+                                city = ""
                             ),
                             connection = emptyList()
                         )
@@ -202,6 +205,18 @@ fun SportFieldSearcherNavGraph(
                     state = settingState,
                     navController = navController,
                     changeTheme = settingsViewModel::changeTheme
+                )
+            }
+        }
+        with(SportFieldSearcherRoute.FieldsMap) {
+            composable(route) {
+                if (appState.userId == null) {
+                    navigateAndClearBackstack(route, SportFieldSearcherRoute.Login.route, navController)
+                    return@composable
+                }
+                FieldMapScreen(
+                    fieldsState = fieldsState,
+                    navController = navController
                 )
             }
         }

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.example.sportfieldsearcher.data.database.SportFieldSearcherDatabase
+import com.example.sportfieldsearcher.data.remote.OSMDataSource
 import com.example.sportfieldsearcher.data.repositories.AppRepository
 import com.example.sportfieldsearcher.data.repositories.ConnectionRepository
 import com.example.sportfieldsearcher.data.repositories.FieldsRepository
@@ -16,6 +17,7 @@ import com.example.sportfieldsearcher.ui.screens.addfield.AddFieldViewModel
 import com.example.sportfieldsearcher.ui.screens.login.LoginViewModel
 import com.example.sportfieldsearcher.ui.screens.register.RegistrationViewModel
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
+import com.example.sportfieldsearcher.ui.utils.LocationService
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -52,6 +54,8 @@ val appModule = module {
     single { get<Context>().dataStore }
     single { SettingsRepository(get()) }
     single { AppRepository(get()) }
+    single { OSMDataSource(get()) }
+    single { LocationService(get()) }
 
     viewModel { AddFieldViewModel() }
     viewModel { AppViewModel(get()) }

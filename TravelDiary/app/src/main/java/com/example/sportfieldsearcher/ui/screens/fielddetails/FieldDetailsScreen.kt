@@ -99,6 +99,11 @@ fun FieldDetailsScreen(
                 style = MaterialTheme.typography.titleLarge
             )
             Text(
+                fieldWithUsers.field.city,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
                 fieldWithUsers.field.date,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.bodyLarge
@@ -129,7 +134,7 @@ fun FieldDetailsScreen(
                             )
                         )
                     },
-                headlineContent = { Text(text = "Consigliato da:") },
+                headlineContent = { Text(text = "Scoperto da:") },
                 trailingContent = {
                     Row {
                         ImageWithPlaceholder(

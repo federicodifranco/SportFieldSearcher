@@ -39,5 +39,8 @@ data class Field(
     val fieldAddedId: Int,
 
     @ColumnInfo
-    val privacyType: PrivacyType
+    val privacyType: PrivacyType,
+
+    @ColumnInfo
+    val city: String
 )

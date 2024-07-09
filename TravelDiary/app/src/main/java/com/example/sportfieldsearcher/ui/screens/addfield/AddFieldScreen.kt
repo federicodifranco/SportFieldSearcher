@@ -136,11 +136,6 @@ fun AddFieldScreen(
                 onValueChange = actions::setName,
                 label = { Text("Name") },
                 modifier = Modifier.fillMaxWidth(),
-                trailingIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(Icons.Outlined.MyLocation, contentDescription = "Current location")
-                    }
-                }
             )
             OutlinedTextField(
                 value = dateState.value,
@@ -159,6 +154,17 @@ fun AddFieldScreen(
                 onValueChange = actions::setDescription,
                 label = { Text("Description") },
                 modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = state.city,
+                onValueChange = actions::setCity,
+                label = { Text("City") },
+                modifier = Modifier.fillMaxWidth(),
+                trailingIcon = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(Icons.Outlined.MyLocation, contentDescription = "Current location")
+                    }
+                }
             )
 
             ExposedDropdownMenuBox(
