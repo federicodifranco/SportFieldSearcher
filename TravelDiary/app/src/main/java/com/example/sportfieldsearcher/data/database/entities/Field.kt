@@ -42,5 +42,8 @@ data class Field(
     val privacyType: PrivacyType,
 
     @ColumnInfo
-    val city: String
+    val city: String,
+
+    @ColumnInfo
+    val fieldPicture: String?
 )

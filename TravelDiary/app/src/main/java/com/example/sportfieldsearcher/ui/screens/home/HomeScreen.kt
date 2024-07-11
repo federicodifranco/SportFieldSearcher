@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     publicFields: List<FieldWithUsers>,
-    createdFields: List<FieldWithUsers>,
+    privateFields: List<FieldWithUsers>,
     navController: NavHostController
 ) {
     Scaffold(
@@ -77,7 +77,7 @@ fun HomeScreen(
         TabLayout(
             contentPadding = contentPadding,
             publicFields = publicFields,
-            createdFields = createdFields,
+            privateFields = privateFields,
             navController = navController,
         )
     }
@@ -88,7 +88,7 @@ fun HomeScreen(
 fun TabLayout(
     contentPadding: PaddingValues,
     publicFields: List<FieldWithUsers>,
-    createdFields: List<FieldWithUsers>,
+    privateFields: List<FieldWithUsers>,
     navController: NavHostController,
 ) {
     val pagerState = rememberPagerState(pageCount = { 2 })
@@ -108,7 +108,7 @@ fun TabLayout(
             contentPadding = contentPadding,
             pagerState = pagerState,
             publicFields = publicFields,
-            createdFields = createdFields,
+            privateFields = privateFields,
             navController = navController,
         )
     }
@@ -117,7 +117,7 @@ fun TabLayout(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Tabs(pagerState: PagerState) {
-    val list = listOf("Public fields", "Your fields")
+    val list = listOf("Public fields", "Private fields")
     val scope = rememberCoroutineScope()
     TabRow(
         selectedTabIndex = pagerState.currentPage,
@@ -149,7 +149,7 @@ fun Tabs(pagerState: PagerState) {
 fun TabsContent(
     pagerState: PagerState,
     publicFields: List<FieldWithUsers>,
-    createdFields: List<FieldWithUsers>,
+    privateFields: List<FieldWithUsers>,
     navController: NavHostController,
     contentPadding: PaddingValues,
 ) {
@@ -162,7 +162,7 @@ fun TabsContent(
             )
             1 -> TabContent(
                 navController = navController,
-                fields = createdFields,
+                fields = privateFields,
                 contentPadding = contentPadding,
             )
         }

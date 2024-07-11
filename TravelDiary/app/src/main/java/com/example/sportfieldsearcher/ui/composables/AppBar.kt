@@ -1,6 +1,7 @@
 package com.example.sportfieldsearcher.ui.composables
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Settings
@@ -26,8 +27,20 @@ fun AppBar(
     navController: NavHostController,
     currentRoute: SportFieldSearcherRoute
 ) {
+    val routesBlackList = listOf(
+        SportFieldSearcherRoute.Home,
+        SportFieldSearcherRoute.Search,
+        SportFieldSearcherRoute.AddField,
+        SportFieldSearcherRoute.Profile,
+        SportFieldSearcherRoute.Settings
+    )
+
     val appViewModel = koinViewModel<AppViewModel>()
     val appState by appViewModel.state.collectAsStateWithLifecycle()
+
+    fun checkRoute(route: SportFieldSearcherRoute): Boolean =
+        routesBlackList.map { it.route }.contains(route.route)
+
     CenterAlignedTopAppBar(
         title = {
             Text(
@@ -36,17 +49,28 @@ fun AppBar(
             )
         },
         navigationIcon = {
-            if (navController.previousBackStackEntry != null) {
-                IconButton(onClick = { navController.navigateUp() }) {
+            if (navController.previousBackStackEntry != null && !checkRoute(currentRoute)) {
+                if (currentRoute == SportFieldSearcherRoute.Profile &&
+                    navController.currentBackStackEntry?.arguments?.getInt("userId") == appState.userId) {
+                    return@CenterAlignedTopAppBar
+                }
+                IconButton(onClick = {
+                    if (currentRoute == SportFieldSearcherRoute.Settings) {
+                        navController.popBackStack()
+                    } else {
+                        navController.navigateUp()
+                    }
+                }) {
                     Icon(
-                        imageVector = Icons.Outlined.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                         contentDescription = "Back button"
                     )
                 }
             }
         },
         actions = {
-            if (currentRoute.route == SportFieldSearcherRoute.Profile.route && navController.currentBackStackEntry?.arguments?.getInt("userId") == appState.userId) {
+            if (currentRoute.route == SportFieldSearcherRoute.Profile.route &&
+                navController.currentBackStackEntry?.arguments?.getInt("userId") == appState.userId) {
                 IconButton(onClick = { navController.navigate(SportFieldSearcherRoute.Settings.route) }) {
                     Icon(Icons.Outlined.Settings, "Settings")
                 }
@@ -69,3 +93,4 @@ fun AppBar(
         )
     )
 }
+

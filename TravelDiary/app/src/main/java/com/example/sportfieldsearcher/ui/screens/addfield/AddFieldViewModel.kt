@@ -1,5 +1,6 @@
 package com.example.sportfieldsearcher.ui.screens.addfield
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.example.sportfieldsearcher.data.database.entities.CategoryType
 import com.example.sportfieldsearcher.data.database.entities.Field
@@ -14,12 +15,12 @@ data class AddFieldState(
     val description: String = "",
     val category: CategoryType,
     val privacyType: PrivacyType,
-    val city: String = ""
+    val city: String = "",
+    val fieldPicture: Uri = Uri.EMPTY
 ) {
     val canSubmit
         get() = name.isNotBlank()
                 && date.isNotBlank()
-                && description.isNotBlank()
                 && category != CategoryType.NONE
                 && privacyType != PrivacyType.NONE
                 && city.isNotBlank()
@@ -31,7 +32,8 @@ data class AddFieldState(
         category = category,
         privacyType = privacyType,
         fieldAddedId = fieldAddedId,
-        city = city
+        city = city,
+        fieldPicture = fieldPicture.toString()
     )
 }
 
@@ -42,6 +44,7 @@ interface AddFieldActions {
     fun setCategory(category: CategoryType)
     fun setPrivacyType(privacyType: PrivacyType)
     fun setCity(city: String)
+    fun setFieldPicture(imageUri: Uri)
 }
 
 class AddFieldViewModel : ViewModel() {
@@ -66,5 +69,8 @@ class AddFieldViewModel : ViewModel() {
 
         override fun setCity(city: String) =
             _state.update { it.copy(city = city) }
+
+        override fun setFieldPicture(imageUri: Uri) =
+            _state.update { it.copy(fieldPicture = imageUri) }
     }
 }

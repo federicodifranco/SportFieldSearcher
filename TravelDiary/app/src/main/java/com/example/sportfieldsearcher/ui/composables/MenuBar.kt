@@ -47,7 +47,8 @@ fun MenuBar(navController: NavHostController) {
 
             Spacer(modifier = Modifier.weight(1.0f, true))
             IconButton(onClick = {
-
+                deleteDuplicates(SportFieldSearcherRoute.Search.route)
+                navController.navigate(SportFieldSearcherRoute.Search.route)
             }) {
                 Icon(Icons.Filled.Search, contentDescription = "Search", modifier = Modifier.size(24.dp))
             }

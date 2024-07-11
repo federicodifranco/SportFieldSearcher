@@ -20,6 +20,10 @@ import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
 import com.example.sportfieldsearcher.ui.utils.LocationService
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 
 val Context.dataStore by preferencesDataStore("settings")
 
@@ -49,6 +53,16 @@ val appModule = module {
         ConnectionRepository(
             get<SportFieldSearcherDatabase>().connectionDAO(),
         )
+    }
+
+    single {
+        HttpClient {
+            install(ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                })
+            }
+        }
     }
 
     single { get<Context>().dataStore }

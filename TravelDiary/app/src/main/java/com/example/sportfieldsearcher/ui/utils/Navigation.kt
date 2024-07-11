@@ -33,6 +33,7 @@ import com.example.sportfieldsearcher.ui.screens.login.LoginViewModel
 import com.example.sportfieldsearcher.ui.screens.profile.ProfileScreen
 import com.example.sportfieldsearcher.ui.screens.register.RegistrationScreen
 import com.example.sportfieldsearcher.ui.screens.register.RegistrationViewModel
+import com.example.sportfieldsearcher.ui.screens.search.SearchScreen
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsScreen
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
 import kotlinx.coroutines.Deferred
@@ -67,9 +68,10 @@ sealed class SportFieldSearcherRoute(
     data object AddField : SportFieldSearcherRoute("add", "Add Field")
     data object Settings : SportFieldSearcherRoute("settings", "Settings")
     data object Registration : SportFieldSearcherRoute("registration", "Registration")
+    data object Search : SportFieldSearcherRoute("search", "Search")
 
     companion object {
-        val routes = setOf(Home, FieldDetails, FieldsMap, AddField, Settings, Profile, Registration, Login)
+        val routes = setOf(Home, FieldDetails, FieldsMap, AddField, Settings, Profile, Registration, Login, Search)
     }
 }
 
@@ -98,13 +100,13 @@ fun SportFieldSearcherNavGraph(
                     navigateAndClearBackstack(route, SportFieldSearcherRoute.Login.route, navController)
                     return@composable
                 }
-                val createdFields =
-                    fieldsState.fieldsWithUsers.filter { it.field.fieldAddedId == appState.userId }
+                val privateFields =
+                    fieldsState.fieldsWithUsers.filter { it.field.privacyType == PrivacyType.PRIVATE }
                 val publicFields =
                     fieldsState.fieldsWithUsers.filter { it.field.privacyType == PrivacyType.PUBLIC }
                 HomeScreen(
                     publicFields = publicFields,
-                    createdFields = createdFields,
+                    privateFields = privateFields,
                     navController = navController,
                 )
             }
@@ -126,7 +128,8 @@ fun SportFieldSearcherNavGraph(
                                 category = CategoryType.NONE,
                                 privacyType = PrivacyType.NONE,
                                 fieldAddedId = -1,
-                                city = ""
+                                city = "",
+                                fieldPicture = null
                             ),
                             connection = emptyList()
                         )
@@ -199,24 +202,25 @@ fun SportFieldSearcherNavGraph(
                 )
             }
         }
+        with(SportFieldSearcherRoute.Search) {
+            composable(route) {
+                if (appState.userId == null) {
+                    navigateAndClearBackstack(route, SportFieldSearcherRoute.Login.route, navController)
+                    return@composable
+                }
+                SearchScreen(
+                    fieldsState = fieldsState,
+                    usersState = usersState,
+                    navController = navController
+                )
+            }
+        }
         with(SportFieldSearcherRoute.Settings) {
             composable(route) {
                 SettingsScreen(
                     state = settingState,
                     navController = navController,
                     changeTheme = settingsViewModel::changeTheme
-                )
-            }
-        }
-        with(SportFieldSearcherRoute.FieldsMap) {
-            composable(route) {
-                if (appState.userId == null) {
-                    navigateAndClearBackstack(route, SportFieldSearcherRoute.Login.route, navController)
-                    return@composable
-                }
-                FieldMapScreen(
-                    fieldsState = fieldsState,
-                    navController = navController
                 )
             }
         }
@@ -257,10 +261,15 @@ fun SportFieldSearcherNavGraph(
                         result != null && result is UserWithFields
                     }
                 )
+
+                fieldsState.fieldsWithUsers.filter { it.field.fieldAddedId == appState.userId }
                 if (isCoroutineFinished) {
+                    val ownFields = fieldsState.fieldsWithUsers
+                        .filter { it.field.fieldAddedId == appState.userId }
+                        .map { it.field }
                     ProfileScreen(
                         user = userWithFields.user,
-                        fields = userWithFields.fields,
+                        fields = ownFields,
                         navController = navController
                     )
                 }
@@ -331,6 +340,18 @@ fun SportFieldSearcherNavGraph(
                         navController = navController
                     )
                 }
+            }
+        }
+        with(SportFieldSearcherRoute.FieldsMap) {
+            composable(route) {
+                if (appState.userId == null) {
+                    navigateAndClearBackstack(route, SportFieldSearcherRoute.Login.route, navController)
+                    return@composable
+                }
+                FieldMapScreen(
+                    fieldsState = fieldsState,
+                    navController = navController
+                )
             }
         }
     }

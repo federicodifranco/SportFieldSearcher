@@ -1,17 +1,24 @@
 package com.example.sportfieldsearcher.ui.screens.addfield
 
+import android.Manifest
 import android.app.DatePickerDialog
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Event
@@ -29,8 +36,11 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.material3.ScaffoldDefaults.contentWindowInsets
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -45,10 +55,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.core.net.toUri
 import com.example.sportfieldsearcher.data.database.entities.CategoryType
 import com.example.sportfieldsearcher.data.database.entities.PrivacyType
+import com.example.sportfieldsearcher.ui.composables.FieldSize
+import com.example.sportfieldsearcher.ui.composables.ImageForField
+import com.example.sportfieldsearcher.ui.composables.ImageWithPlaceholder
+import com.example.sportfieldsearcher.ui.composables.Size
+import com.example.sportfieldsearcher.ui.utils.rememberCameraLauncher
+import com.example.sportfieldsearcher.ui.utils.rememberPermission
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -77,6 +94,20 @@ fun AddFieldScreen(
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         )
+    }
+
+    val cameraLauncher = rememberCameraLauncher { imageUri -> actions.setFieldPicture(imageUri) }
+    val cameraPermission = rememberPermission(Manifest.permission.CAMERA) { status ->
+        if (status.isGranted)
+            cameraLauncher.captureImage()
+        else
+            Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
+    }
+    fun takePicture() {
+        if (cameraPermission.status.isGranted)
+            cameraLauncher.captureImage()
+        else
+            cameraPermission.launchPermissionRequest()
     }
 
     val expandedCategory = remember { mutableStateOf(false) }
@@ -121,7 +152,8 @@ fun AddFieldScreen(
             ) {
                 Icon(Icons.Outlined.Check, contentDescription = "Add Field")
             }
-        }
+        },
+        contentWindowInsets = contentWindowInsets.exclude(NavigationBarDefaults.windowInsets)
     ) { contentPadding ->
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -138,35 +170,45 @@ fun AddFieldScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
-                value = dateState.value,
-                onValueChange = { dateState.value = it },
-                label = { Text("Date") },
-                modifier = Modifier.fillMaxWidth(),
-                readOnly = true,
-                trailingIcon = {
-                    IconButton(onClick = { datePickerDialog.show() }) {
-                        Icon(Icons.Outlined.Event, contentDescription = "Pick date")
-                    }
-                }
-            )
-            OutlinedTextField(
                 value = state.description,
                 onValueChange = actions::setDescription,
                 label = { Text("Description") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = state.city,
-                onValueChange = actions::setCity,
-                label = { Text("City") },
                 modifier = Modifier.fillMaxWidth(),
-                trailingIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(Icons.Outlined.MyLocation, contentDescription = "Current location")
-                    }
-                }
             )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                OutlinedTextField(
+                    value = dateState.value,
+                    onValueChange = { dateState.value = it },
+                    label = { Text("Date") },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    trailingIcon = {
+                        IconButton(onClick = { datePickerDialog.show() }) {
+                            Icon(Icons.Outlined.Event, contentDescription = "Pick date")
+                        }
+                    }
+                )
 
+                OutlinedTextField(
+                    value = state.city,
+                    onValueChange = actions::setCity,
+                    label = { Text("City") },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    trailingIcon = {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(Icons.Outlined.MyLocation, contentDescription = "Current location")
+                        }
+                    }
+                )
+            }
             ExposedDropdownMenuBox(
                 expanded = expandedCategory.value,
                 onExpandedChange = { expandedCategory.value = !expandedCategory.value }
@@ -230,9 +272,10 @@ fun AddFieldScreen(
                     }
                 }
             }
+
             Spacer(Modifier.size(4.dp))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = ::takePicture,
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
             ) {
                 Icon(
@@ -246,19 +289,24 @@ fun AddFieldScreen(
 
             Spacer(Modifier.size(8.dp))
 
-            Image(
-                Icons.Outlined.Image,
-                contentDescription = "Field picture",
-                contentScale = ContentScale.Fit,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .height(200.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(MaterialTheme.colorScheme.secondary)
-                    .padding(18.dp)
-            )
+            if (state.fieldPicture == Uri.EMPTY) {
+                Image(
+                    Icons.Outlined.Image,
+                    contentDescription = "Field picture",
+                    contentScale = ContentScale.Crop,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
+                    modifier = Modifier
+                        .size(200.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.secondary)
+                        .padding(20.dp)
+                )
+            } else {
+                ImageForField(
+                    uri = state.fieldPicture,
+                    size = FieldSize.Large
+                )
+            }
         }
     }
 }

@@ -7,10 +7,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -22,7 +24,9 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,6 +42,8 @@ import androidx.navigation.NavHostController
 import com.example.sportfieldsearcher.data.database.entities.Field
 import com.example.sportfieldsearcher.data.database.entities.FieldWithUsers
 import com.example.sportfieldsearcher.data.database.entities.User
+import com.example.sportfieldsearcher.ui.composables.FieldSize
+import com.example.sportfieldsearcher.ui.composables.ImageForField
 import com.example.sportfieldsearcher.ui.composables.ImageWithPlaceholder
 import com.example.sportfieldsearcher.ui.composables.Size
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
@@ -74,25 +80,36 @@ fun FieldDetailsScreen(
                 Icon(Icons.Outlined.Share, "Share field")
             }
         },
+        contentWindowInsets = ScaffoldDefaults.contentWindowInsets.exclude(NavigationBarDefaults.windowInsets)
     ) { contentPadding ->
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(contentPadding).padding(12.dp).fillMaxSize()
+            modifier = Modifier
+                .padding(contentPadding)
+                .padding(12.dp)
+                .fillMaxSize()
         ) {
-            Image(
-                Icons.Outlined.Image,
-                "Field picture",
-                contentScale = ContentScale.Fit,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
-                modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .height(300.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.secondary)
-                    .padding(36.dp)
-            )
+            if (fieldWithUsers.field.fieldPicture == null) {
+                Image(
+                    Icons.Outlined.Image,
+                    contentDescription = "Field picture",
+                    contentScale = ContentScale.Crop,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
+                    modifier = Modifier
+                        .padding(vertical = 10.dp)
+                        .height(400.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(MaterialTheme.colorScheme.secondary)
+                        .padding(30.dp)
+                )
+            } else {
+                ImageForField(
+                    uri = fieldWithUsers.field.fieldPicture.toUri(),
+                    size = FieldSize.Large
+                )
+            }
             Text(
                 fieldWithUsers.field.name,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -108,11 +125,19 @@ fun FieldDetailsScreen(
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.bodyLarge
             )
-            Text(
-                fieldWithUsers.field.description,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.bodyLarge
-            )
+            if (fieldWithUsers.field.description.isNotBlank()) {
+                Text(
+                    fieldWithUsers.field.description,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            } else {
+                Text(
+                    text = "No Description",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
             Text(
                 fieldWithUsers.field.category.name,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -126,7 +151,9 @@ fun FieldDetailsScreen(
             ListItem(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(horizontal = 50.dp)
+                    .padding(horizontal = 75.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.onPrimaryContainer)
                     .clickable {
                         navController.navigate(
                             SportFieldSearcherRoute.Profile.buildRoute(
@@ -143,7 +170,7 @@ fun FieldDetailsScreen(
                         )
                         Text(
                             modifier = Modifier
-                                .padding(start = 10.dp)
+                                .padding(start = 5.dp)
                                 .align(Alignment.CenterVertically),
                             text = fieldAdded.username
                         )
@@ -162,3 +189,4 @@ fun FieldDetailsScreen(
         }
     }
 }
+
