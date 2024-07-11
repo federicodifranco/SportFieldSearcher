@@ -35,6 +35,7 @@ import com.example.sportfieldsearcher.ui.screens.register.RegistrationScreen
 import com.example.sportfieldsearcher.ui.screens.register.RegistrationViewModel
 import com.example.sportfieldsearcher.ui.screens.search.SearchScreen
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsScreen
+import com.example.sportfieldsearcher.ui.screens.statistics.StatisticsScreen
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.compose.koinViewModel
@@ -68,9 +69,10 @@ sealed class SportFieldSearcherRoute(
     data object Settings : SportFieldSearcherRoute("settings", "Settings")
     data object Registration : SportFieldSearcherRoute("registration", "Registration")
     data object Search : SportFieldSearcherRoute("search", "Search")
+    data object Statistics: SportFieldSearcherRoute("statistics", "Statistics")
 
     companion object {
-        val routes = setOf(Home, FieldDetails, FieldsMap, AddField, Settings, Profile, Registration, Login, Search)
+        val routes = setOf(Home, FieldDetails, FieldsMap, AddField, Settings, Profile, Registration, Login, Search, Statistics)
     }
 }
 
@@ -179,6 +181,15 @@ fun SportFieldSearcherNavGraph(
                         }
                     )
                 }
+            }
+        }
+        with(SportFieldSearcherRoute.Statistics) {
+            composable(route) {
+                if (appState.userId == null) {
+                    navigateAndClearBackstack(route, SportFieldSearcherRoute.Login.route, navController)
+                    return@composable
+                }
+                StatisticsScreen(fields = fieldsState.fieldsWithUsers)
             }
         }
         with(SportFieldSearcherRoute.AddField) {
