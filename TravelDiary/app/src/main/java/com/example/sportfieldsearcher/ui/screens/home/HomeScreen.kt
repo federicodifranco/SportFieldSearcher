@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -23,6 +24,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.LocationOn
@@ -52,8 +54,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import com.example.sportfieldsearcher.data.database.entities.FieldWithUsers
+import com.example.sportfieldsearcher.ui.composables.FieldSize
+import com.example.sportfieldsearcher.ui.composables.ImageForField
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
 import kotlinx.coroutines.launch
 
@@ -228,17 +233,26 @@ fun FieldItem(fieldWithUsers: FieldWithUsers, onClick: () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                Icons.Outlined.Image,
-                contentDescription = "Field picture",
-                contentScale = ContentScale.Fit,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
-                modifier = Modifier
-                    .size(72.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.secondary)
-                    .padding(20.dp)
-            )
+            if (fieldWithUsers.field.fieldPicture == null) {
+                Image(
+                    Icons.Outlined.Image,
+                    contentDescription = "Field picture",
+                    contentScale = ContentScale.Crop,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
+                    modifier = Modifier
+                        .padding(vertical = 10.dp)
+                        .height(400.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(MaterialTheme.colorScheme.secondary)
+                        .padding(30.dp)
+                )
+            } else {
+                ImageForField(
+                    uri = fieldWithUsers.field.fieldPicture.toUri(),
+                    size = FieldSize.Small
+                )
+            }
             Spacer(Modifier.size(4.dp))
             Text(
                 text = fieldWithUsers.field.name,
