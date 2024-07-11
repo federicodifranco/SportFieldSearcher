@@ -22,12 +22,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.sportfieldsearcher.data.models.Theme
 import com.example.sportfieldsearcher.ui.composables.AppBar
 import com.example.sportfieldsearcher.ui.composables.MenuBar
-import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
+import com.example.sportfieldsearcher.ui.controllers.AppViewModel
 import com.example.sportfieldsearcher.ui.theme.SportFieldSearcherTheme
 import com.example.sportfieldsearcher.ui.utils.LocationService
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherNavGraph
 import com.example.sportfieldsearcher.ui.utils.SportFieldSearcherRoute
 import org.koin.android.ext.android.get
+import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("StaticFieldLeak")
 private lateinit var locationService: LocationService
@@ -39,7 +40,7 @@ class MainActivity : ComponentActivity() {
         locationService = get<LocationService>()
         setContent {
 
-            val settingsviewModel by viewModels<SettingsViewModel>()
+            val settingsviewModel = koinViewModel<AppViewModel>()
             val state by settingsviewModel.state.collectAsStateWithLifecycle()
 
             SportFieldSearcherTheme(

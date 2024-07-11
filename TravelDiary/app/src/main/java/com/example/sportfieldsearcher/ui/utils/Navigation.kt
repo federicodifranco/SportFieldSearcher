@@ -35,7 +35,6 @@ import com.example.sportfieldsearcher.ui.screens.register.RegistrationScreen
 import com.example.sportfieldsearcher.ui.screens.register.RegistrationViewModel
 import com.example.sportfieldsearcher.ui.screens.search.SearchScreen
 import com.example.sportfieldsearcher.ui.screens.settings.SettingsScreen
-import com.example.sportfieldsearcher.ui.screens.settings.SettingsViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.compose.koinViewModel
@@ -84,8 +83,6 @@ fun SportFieldSearcherNavGraph(
     val usersState by usersViewModel.state.collectAsStateWithLifecycle()
     val fieldsVM = koinViewModel<FieldsViewModel>()
     val fieldsState by fieldsVM.state.collectAsStateWithLifecycle()
-    val settingsViewModel = koinViewModel<SettingsViewModel>()
-    val settingState by settingsViewModel.state.collectAsStateWithLifecycle()
     val appViewModel = koinViewModel<AppViewModel>()
     val appState by appViewModel.state.collectAsStateWithLifecycle()
 
@@ -217,10 +214,13 @@ fun SportFieldSearcherNavGraph(
         }
         with(SportFieldSearcherRoute.Settings) {
             composable(route) {
+                if (appState.userId == null) {
+                    navigateAndClearBackstack(route, SportFieldSearcherRoute.Login.route, navController)
+                    return@composable
+                }
                 SettingsScreen(
-                    state = settingState,
-                    navController = navController,
-                    changeTheme = settingsViewModel::changeTheme
+                    state = appState,
+                    changeTheme = appViewModel::changeTheme
                 )
             }
         }

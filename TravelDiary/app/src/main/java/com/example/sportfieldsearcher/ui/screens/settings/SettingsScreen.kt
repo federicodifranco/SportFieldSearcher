@@ -19,12 +19,12 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.sportfieldsearcher.data.models.Theme
+import com.example.sportfieldsearcher.ui.controllers.AppState
 import com.example.sportfieldsearcher.ui.theme.Gray
 
 @Composable
 fun SettingsScreen(
-    state: SettingState,
-    navController: NavController,
+    state: AppState,
     changeTheme: (Theme) -> Unit
 ) {
     Column(Modifier.selectableGroup()) {
