@@ -34,7 +34,7 @@ fun ImageForField(uri: Uri?, size: FieldSize) {
                     when (size) {
                         FieldSize.VerySmall -> 36.dp
                         FieldSize.Small -> 72.dp
-                        FieldSize.Large -> 256.dp
+                        FieldSize.Large -> 200.dp
                     }
                 )
                 .clip(CircleShape)
@@ -49,7 +49,7 @@ fun ImageForField(uri: Uri?, size: FieldSize) {
                     when (size) {
                         FieldSize.VerySmall -> 36.dp
                         FieldSize.Small -> 72.dp
-                        FieldSize.Large -> 256.dp
+                        FieldSize.Large -> 200.dp
                     }
                 )
                 .clip(CircleShape)

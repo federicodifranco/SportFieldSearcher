@@ -1,9 +1,7 @@
 package com.example.sportfieldsearcher.ui.screens.addfield
 
-import android.Manifest
 import android.app.DatePickerDialog
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,18 +11,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.MyLocation
-import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -39,7 +35,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.ScaffoldDefaults.contentWindowInsets
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -57,15 +52,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.example.sportfieldsearcher.data.database.entities.CategoryType
 import com.example.sportfieldsearcher.data.database.entities.PrivacyType
 import com.example.sportfieldsearcher.ui.composables.FieldSize
 import com.example.sportfieldsearcher.ui.composables.ImageForField
-import com.example.sportfieldsearcher.ui.composables.ImageWithPlaceholder
-import com.example.sportfieldsearcher.ui.composables.Size
-import com.example.sportfieldsearcher.ui.utils.rememberCameraLauncher
-import com.example.sportfieldsearcher.ui.utils.rememberPermission
+import com.example.sportfieldsearcher.ui.utils.rememberGalleryLauncher
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -96,19 +87,8 @@ fun AddFieldScreen(
         )
     }
 
-    val cameraLauncher = rememberCameraLauncher { imageUri -> actions.setFieldPicture(imageUri) }
-    val cameraPermission = rememberPermission(Manifest.permission.CAMERA) { status ->
-        if (status.isGranted)
-            cameraLauncher.captureImage()
-        else
-            Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
-    }
-    fun takePicture() {
-        if (cameraPermission.status.isGranted)
-            cameraLauncher.captureImage()
-        else
-            cameraPermission.launchPermissionRequest()
-    }
+    val galleryLauncher =
+        rememberGalleryLauncher { imageUri -> actions.setFieldPicture(imageUri) }
 
     val expandedCategory = remember { mutableStateOf(false) }
     val expandedPrivacy = remember { mutableStateOf(false) }
@@ -156,11 +136,11 @@ fun AddFieldScreen(
         contentWindowInsets = contentWindowInsets.exclude(NavigationBarDefaults.windowInsets)
     ) { contentPadding ->
         Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(contentPadding)
-                .padding(12.dp)
+                .padding(5.dp)
                 .fillMaxSize()
         ) {
             OutlinedTextField(
@@ -240,7 +220,6 @@ fun AddFieldScreen(
                     }
                 }
             }
-            Spacer(Modifier.size(4.dp))
             ExposedDropdownMenuBox(
                 expanded = expandedPrivacy.value,
                 onExpandedChange = { expandedPrivacy.value = !expandedPrivacy.value }
@@ -272,22 +251,16 @@ fun AddFieldScreen(
                     }
                 }
             }
-
-            Spacer(Modifier.size(4.dp))
             Button(
-                onClick = ::takePicture,
+                onClick = { galleryLauncher.selectImage() },
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
             ) {
-                Icon(
-                    Icons.Outlined.PhotoCamera,
-                    contentDescription = "Camera icon",
-                    modifier = Modifier.size(16.dp)
-                )
+                Icon(Icons.Filled.Image, contentDescription = "Gallery Icon", modifier = Modifier.size(24.dp))
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Take a picture")
+                Text("Select Image")
             }
 
-            Spacer(Modifier.size(8.dp))
+            Spacer(Modifier.size(5.dp))
 
             if (state.fieldPicture == Uri.EMPTY) {
                 Image(
@@ -299,7 +272,7 @@ fun AddFieldScreen(
                         .size(200.dp)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.secondary)
-                        .padding(20.dp)
+                        .padding(5.dp)
                 )
             } else {
                 ImageForField(

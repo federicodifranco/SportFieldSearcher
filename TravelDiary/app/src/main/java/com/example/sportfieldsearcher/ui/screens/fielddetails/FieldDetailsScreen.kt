@@ -97,12 +97,12 @@ fun FieldDetailsScreen(
                     contentScale = ContentScale.Crop,
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
                     modifier = Modifier
-                        .padding(vertical = 10.dp)
-                        .height(400.dp)
+                        .padding(vertical = 5.dp)
+                        .height(100.dp)
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(10.dp))
+                        .clip(RoundedCornerShape(5.dp))
                         .background(MaterialTheme.colorScheme.secondary)
-                        .padding(30.dp)
+                        .padding(5.dp)
                 )
             } else {
                 ImageForField(
@@ -151,8 +151,8 @@ fun FieldDetailsScreen(
             ListItem(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(horizontal = 75.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .padding(horizontal = 30.dp)
+                    .clip(RoundedCornerShape(6.dp))
                     .background(MaterialTheme.colorScheme.onPrimaryContainer)
                     .clickable {
                         navController.navigate(

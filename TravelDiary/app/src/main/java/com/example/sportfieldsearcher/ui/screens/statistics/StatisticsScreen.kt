@@ -82,7 +82,13 @@ fun Legend(data: List<PieChartData>) {
 fun calculateCategoryPercentages(fields: List<FieldWithUsers>): List<PieChartData> {
     val categoryCount = fields.groupBy { it.field.category.name }.mapValues { it.value.size }
     val total = categoryCount.values.sum()
-    val colors = listOf(Color.Red, Color.Green, Color.Blue, Color(0xFFFFA500), Color(0xFF800080))
+    val colors = listOf(
+        Color(0xFF8B0000),
+        Color(0xFF006400),
+        Color(0xFF00008B),
+        Color(0xFFFFA500)
+    )
+
 
     return categoryCount.entries.mapIndexed { index, entry ->
         PieChartData(
