@@ -40,16 +40,30 @@ fun StatisticsScreen(fields: List<FieldWithUsers>) {
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(Modifier.size(20.dp))
         Legend(data = data)
-        Spacer(Modifier.size(20.dp))
-        Column(
+        Spacer(Modifier.size(16.dp))
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.Start
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            data.forEach { item ->
+            data.take(2).forEach { item ->
                 Text(
-                    text = "Current percentage of ${item.name}: ${item.value}%",
+                    text = "${item.name} : ${item.value}%",
                     style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(vertical = 4.dp)
+                    modifier = Modifier.padding(vertical = 2.dp)
+                )
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            data.drop(2).take(2).forEach { item ->
+                Text(
+                    text = "${item.name} : ${item.value}%",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(vertical = 2.dp)
                 )
             }
         }

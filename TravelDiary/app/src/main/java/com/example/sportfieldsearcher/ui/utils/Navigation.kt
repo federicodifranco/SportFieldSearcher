@@ -272,15 +272,10 @@ fun SportFieldSearcherNavGraph(
                         result != null && result is UserWithFields
                     }
                 )
-
-                fieldsState.fieldsWithUsers.filter { it.field.fieldAddedId == appState.userId }
                 if (isCoroutineFinished) {
-                    val ownFields = fieldsState.fieldsWithUsers
-                        .filter { it.field.fieldAddedId == appState.userId }
-                        .map { it.field }
                     ProfileScreen(
                         user = userWithFields.user,
-                        fields = ownFields,
+                        fields = userWithFields.createdFields,
                         navController = navController
                     )
                 }
