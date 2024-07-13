@@ -32,7 +32,8 @@ fun StatisticsScreen(fields: List<FieldWithUsers>) {
     ) {
         Text(
             text = "Sport Categories",
-            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(bottom = 16.dp)
         )
         Spacer(Modifier.size(20.dp))
@@ -49,6 +50,7 @@ fun StatisticsScreen(fields: List<FieldWithUsers>) {
             data.take(2).forEach { item ->
                 Text(
                     text = "${item.name} : ${item.value}%",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(vertical = 2.dp)
                 )
@@ -62,6 +64,7 @@ fun StatisticsScreen(fields: List<FieldWithUsers>) {
             data.drop(2).take(2).forEach { item ->
                 Text(
                     text = "${item.name} : ${item.value}%",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(vertical = 2.dp)
                 )
@@ -87,7 +90,7 @@ fun Legend(data: List<PieChartData>) {
                         .background(item.color, CircleShape)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = item.name, style = MaterialTheme.typography.bodyMedium)
+                Text(text = item.name, color = MaterialTheme.colorScheme.onPrimaryContainer, style = MaterialTheme.typography.bodyMedium)
             }
         }
     }

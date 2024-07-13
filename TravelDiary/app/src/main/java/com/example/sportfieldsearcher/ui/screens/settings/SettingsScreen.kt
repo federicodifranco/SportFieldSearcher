@@ -37,6 +37,7 @@ fun SettingsScreen(
         ) {
             Text(
                 text = "Change theme",
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.headlineMedium,
             )
         }
@@ -60,6 +61,7 @@ fun SettingsScreen(
                 )
                 Text(
                     text = theme.toString(),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(start = 16.dp)
                 )

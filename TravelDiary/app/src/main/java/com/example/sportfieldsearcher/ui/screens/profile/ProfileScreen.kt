@@ -48,7 +48,7 @@ fun ProfileScreen(
             item {
                 Spacer(Modifier.size(10.dp))
                 ImageWithPlaceholder(uri = user.profilePicture?.toUri(), size = com.example.sportfieldsearcher.ui.composables.Size.Large)
-                Text(text = user.username, style = MaterialTheme.typography.headlineMedium)
+                Text(text = user.username, color = MaterialTheme.colorScheme.onPrimaryContainer, style = MaterialTheme.typography.headlineMedium)
                 HorizontalDivider(Modifier.padding(5.dp))
                 Spacer(Modifier.size(5.dp))
             }
@@ -73,7 +73,8 @@ fun AllFields(
             text = "Your Fields",
             fontWeight = FontWeight.Bold,
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            style = MaterialTheme.typography.headlineMedium
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            style = MaterialTheme.typography.headlineSmall,
         )
         Spacer(Modifier.size(10.dp))
         if (fields.isNotEmpty()) {
@@ -91,7 +92,8 @@ fun AllFields(
         } else {
             Text(
                 text = "No fields posted",
-                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = MaterialTheme.typography.headlineSmall,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxSize()
