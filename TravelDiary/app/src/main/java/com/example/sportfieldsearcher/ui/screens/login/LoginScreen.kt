@@ -17,6 +17,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -37,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -94,6 +96,7 @@ fun LoginScreen(
                 value = state.email,
                 onValueChange = actions::setEmail,
                 label = { Text("Email") },
+                textStyle = TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer),
                 modifier = Modifier,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
@@ -101,6 +104,7 @@ fun LoginScreen(
                 value = state.password,
                 onValueChange = actions::setPassword,
                 label = { Text("Password") },
+                textStyle = TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer),
                 modifier = Modifier,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)

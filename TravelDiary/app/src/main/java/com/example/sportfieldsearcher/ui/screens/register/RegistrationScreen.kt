@@ -23,6 +23,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -41,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -115,6 +117,7 @@ fun RegistrationScreen(
                 value = state.username,
                 onValueChange = actions::setUsername,
                 label = { Text("Username") },
+                textStyle = TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer),
                 modifier = Modifier,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
@@ -122,6 +125,7 @@ fun RegistrationScreen(
                 value = state.email,
                 onValueChange = actions::setEmail,
                 label = { Text("Email") },
+                textStyle = TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer),
                 modifier = Modifier,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
@@ -129,6 +133,7 @@ fun RegistrationScreen(
                 value = state.password,
                 onValueChange = actions::setPassword,
                 label = { Text("Password") },
+                textStyle = TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer),
                 modifier = Modifier,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
@@ -137,6 +142,7 @@ fun RegistrationScreen(
                 value = state.confirmPassword,
                 onValueChange = actions::setConfirmPassword,
                 label = { Text("Confirm Password") },
+                textStyle = TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer),
                 modifier = Modifier,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
