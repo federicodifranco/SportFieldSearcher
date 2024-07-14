@@ -110,7 +110,6 @@ fun TabLayout(
     ) {
         Tabs(pagerState = pagerState)
         TabsContent(
-            contentPadding = contentPadding,
             pagerState = pagerState,
             publicFields = publicFields,
             privateFields = privateFields,
@@ -155,20 +154,17 @@ fun TabsContent(
     pagerState: PagerState,
     publicFields: List<FieldWithUsers>,
     privateFields: List<FieldWithUsers>,
-    navController: NavHostController,
-    contentPadding: PaddingValues,
+    navController: NavHostController
 ) {
     HorizontalPager(state = pagerState) { page ->
         when (page) {
             0 -> TabContent(
                 navController = navController,
-                fields = publicFields,
-                contentPadding = contentPadding,
+                fields = publicFields
             )
             1 -> TabContent(
                 navController = navController,
-                fields = privateFields,
-                contentPadding = contentPadding,
+                fields = privateFields
             )
         }
     }
@@ -177,8 +173,7 @@ fun TabsContent(
 @Composable
 fun TabContent(
     navController: NavHostController,
-    fields: List<FieldWithUsers>,
-    contentPadding: PaddingValues,
+    fields: List<FieldWithUsers>
 ) {
     Box(
         Modifier
@@ -256,14 +251,14 @@ fun FieldItem(fieldWithUsers: FieldWithUsers, onClick: () -> Unit) {
             Spacer(Modifier.size(4.dp))
             Text(
                 text = fieldWithUsers.field.name,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.size(4.dp))
             Text(
                 text = fieldWithUsers.field.category.name,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )

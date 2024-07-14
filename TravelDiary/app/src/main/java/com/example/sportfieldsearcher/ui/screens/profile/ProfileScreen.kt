@@ -53,7 +53,7 @@ fun ProfileScreen(
                 Spacer(Modifier.size(5.dp))
             }
             item {
-                AllFields(fields = fields, user = user, navController = navController)
+                AllFields(fields = fields, navController = navController)
             }
         }
     }
@@ -62,7 +62,6 @@ fun ProfileScreen(
 @Composable
 fun AllFields(
     fields: List<Field>,
-    user: User,
     navController: NavHostController
 ) {
     Column(
@@ -108,7 +107,7 @@ fun AllFields(
 fun FieldItem(field: Field, onClick: () -> Unit) {
     ListItem(
         modifier = Modifier.clickable(onClick = onClick),
-        headlineContent = { Text(text = field.name) },
+        headlineContent = { Text(text = field.name, color = MaterialTheme.colorScheme.onPrimaryContainer) },
         leadingContent = {
             ImageForField(
                 uri = field.fieldPicture?.toUri(),

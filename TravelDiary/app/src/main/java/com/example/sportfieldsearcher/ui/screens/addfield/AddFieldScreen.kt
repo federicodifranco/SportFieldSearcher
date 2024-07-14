@@ -146,13 +146,15 @@ fun AddFieldScreen(
             OutlinedTextField(
                 value = state.name,
                 onValueChange = actions::setName,
-                label = { Text("Name") },
+                label = { Text("Name", color = MaterialTheme.colorScheme.onPrimaryContainer) },
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimaryContainer),
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = state.description,
                 onValueChange = actions::setDescription,
-                label = { Text("Description") },
+                label = { Text("Description", color = MaterialTheme.colorScheme.onPrimaryContainer) },
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimaryContainer),
                 modifier = Modifier.fillMaxWidth(),
             )
             Row(
@@ -162,14 +164,15 @@ fun AddFieldScreen(
                 OutlinedTextField(
                     value = dateState.value,
                     onValueChange = { dateState.value = it },
-                    label = { Text("Date") },
+                    label = { Text("Date", color = MaterialTheme.colorScheme.onPrimaryContainer) },
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimaryContainer),
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 8.dp),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     trailingIcon = {
                         IconButton(onClick = { datePickerDialog.show() }) {
-                            Icon(Icons.Outlined.Event, contentDescription = "Pick date")
+                            Icon(Icons.Outlined.Event, contentDescription = "Pick date", tint = MaterialTheme.colorScheme.onPrimaryContainer)
                         }
                     }
                 )
@@ -177,14 +180,15 @@ fun AddFieldScreen(
                 OutlinedTextField(
                     value = state.city,
                     onValueChange = actions::setCity,
-                    label = { Text("City") },
+                    label = { Text("City", color = MaterialTheme.colorScheme.onPrimaryContainer) },
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimaryContainer),
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 8.dp),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     trailingIcon = {
                         IconButton(onClick = { /*TODO*/ }) {
-                            Icon(Icons.Outlined.MyLocation, contentDescription = "Current location")
+                            Icon(Icons.Outlined.MyLocation, contentDescription = "Current location", tint = MaterialTheme.colorScheme.onPrimaryContainer)
                         }
                     }
                 )
@@ -197,7 +201,8 @@ fun AddFieldScreen(
                     value = state.category.name,
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Category") },
+                    label = { Text("Category", color = MaterialTheme.colorScheme.onPrimaryContainer) },
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimaryContainer),
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCategory.value)
                     },
@@ -211,7 +216,7 @@ fun AddFieldScreen(
                 ) {
                     CategoryType.entries.forEach { category ->
                         DropdownMenuItem(
-                            text = { Text(category.name) },
+                            text = { Text(category.name, color = MaterialTheme.colorScheme.onPrimaryContainer) },
                             onClick = {
                                 actions.setCategory(category)
                                 expandedCategory.value = false
@@ -228,7 +233,8 @@ fun AddFieldScreen(
                     value = state.privacyType.name,
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Privacy") },
+                    label = { Text("Privacy", color = MaterialTheme.colorScheme.onPrimaryContainer) },
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimaryContainer),
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedPrivacy.value)
                     },
@@ -242,7 +248,7 @@ fun AddFieldScreen(
                 ) {
                     PrivacyType.entries.forEach { privacy ->
                         DropdownMenuItem(
-                            text = { Text(privacy.name) },
+                            text = { Text(privacy.name, color = MaterialTheme.colorScheme.onPrimaryContainer) },
                             onClick = {
                                 actions.setPrivacyType(privacy)
                                 expandedPrivacy.value = false

@@ -219,7 +219,7 @@ fun TabContentFields(
                                         )
                                     )
                                 },
-                                headlineContent = { Text(text = fieldWithUsers.field.name) },
+                                headlineContent = { Text(text = fieldWithUsers.field.name, color = MaterialTheme.colorScheme.onPrimaryContainer) },
                                 leadingContent = {
                                     ImageForField(
                                         uri = fieldWithUsers.field.fieldPicture?.toUri(),
@@ -288,7 +288,7 @@ fun TabContentUsers(
                                     )
                                 )
                             },
-                            headlineContent = { Text(text = users.username) },
+                            headlineContent = { Text(text = users.username, color = MaterialTheme.colorScheme.onPrimaryContainer) },
                             leadingContent = {
                                 ImageWithPlaceholder(
                                     uri = users.profilePicture?.toUri(),
@@ -350,7 +350,7 @@ fun TabContentCategory(
                                         )
                                     )
                                 },
-                                headlineContent = { Text(text = fieldWithUsers.field.name) },
+                                headlineContent = { Text(text = fieldWithUsers.field.name, color = MaterialTheme.colorScheme.onPrimaryContainer) },
                                 leadingContent = {
                                     ImageForField(
                                         uri = fieldWithUsers.field.fieldPicture?.toUri(),
